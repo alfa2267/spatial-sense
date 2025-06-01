@@ -98,4 +98,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support or questions, please contact our team at support@spatialsense.com
+For support or questions, please contact me.
