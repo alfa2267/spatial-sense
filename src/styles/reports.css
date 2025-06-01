@@ -1,0 +1,225 @@
+/* Reports Page Styles */
+
+/* Template Selection Cards */
+.template-option {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.template-option .card {
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.template-option:hover .card {
+    border-color: var(--bs-primary);
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.template-option.selected .card {
+    border-color: var(--bs-primary);
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.template-icon {
+    color: var(--bs-primary);
+    transition: all 0.3s ease;
+}
+
+/* Signature Canvas */
+.signature-canvas {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    touch-action: none;
+}
+
+/* File Dropzone */
+.dropzone {
+    border: 2px dashed #dee2e6;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dropzone:hover {
+    border-color: var(--bs-primary);
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+.dropzone.dragover {
+    border-color: var(--bs-success);
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+/* File Preview */
+.file-preview {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.file-preview .file-icon {
+    font-size: 1.5rem;
+    margin-right: 0.75rem;
+    color: #6c757d;
+}
+
+.file-preview .file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-preview .file-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.25rem;
+}
+
+.file-preview .file-size {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.file-preview .file-remove {
+    margin-left: 0.75rem;
+    color: #dc3545;
+    cursor: pointer;
+}
+
+/* Report List */
+.report-item {
+    transition: all 0.2s ease;
+}
+
+.report-item:hover {
+    background-color: #f8f9fa;
+}
+
+.report-item .actions {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.report-item:hover .actions {
+    opacity: 1;
+}
+
+/* Status Badges */
+.badge-draft {
+    background-color: #6c757d;
+    color: white;
+}
+
+.badge-in-progress {
+    background-color: #0dcaf0;
+    color: black;
+}
+
+.badge-pending-review {
+    background-color: #ffc107;
+    color: black;
+}
+
+.badge-completed {
+    background-color: #198754;
+    color: white;
+}
+
+/* Responsive Table */
+@media (max-width: 992px) {
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table th, 
+    .table td {
+        white-space: nowrap;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .no-print,
+    .navbar,
+    .sidebar,
+    .btn,
+    .actions {
+        display: none !important;
+    }
+    
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+    
+    .card-header {
+        background-color: transparent !important;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .table th {
+        background-color: #f8f9fa !important;
+    }
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    margin: 2rem auto;
+    display: block;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Template Preview */
+.template-preview {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.template-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Signature Pad Container */
+.signature-pad-container {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 700px;
+}
+
+/* Report Preview */
+.report-preview {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 2rem;
+    background: white;
+    min-height: 800px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}

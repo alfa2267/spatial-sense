@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} - {{clientName}}</title>
+    <link href="/css/print/reports.css" rel="stylesheet" media="print">
+    <style>
+        /* Base styles for all reports */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+        .report-title {
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        .client-info, .report-meta {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .section {
+            margin: 30px 0;
+            page-break-inside: avoid;
+        }
+        .section-title {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 15px;
+        }
+        .signature-area {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .signature-box {
+            width: 300px;
+            margin: 20px 0;
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 80%;
+            margin: 40px 0 10px;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #7f8c8d;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .print-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="/images/logo.png" alt="Company Logo" class="logo">
+        <h1 class="report-title">{{title}}</h1>
+        <p>Prepared for: {{clientName}}</p>
+        <p class="text-muted">Generated on: {{generationDate}}</p>
+    </div>
+
+    <div class="client-info">
+        <div>
+            <h4>Client Information</h4>
+            <p>{{clientName}}<br>
+            {{clientAddress}}<br>
+            {{clientPhone}}<br>
+            {{clientEmail}}</p>
+        </div>
+        <div>
+            <h4>Report Details</h4>
+            <p>Report ID: {{reportId}}<br>
+            Status: {{status}}<br>
+            Version: {{version}}<br>
+            Prepared by: {{author}}</p>
+        </div>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="signature-area">
+        <div class="signature-box">
+            <div class="signature-placeholder" style="height: 100px; border: 1px dashed #ccc; margin-bottom: 10px;">
+                <!-- Signature will be placed here -->
+            </div>
+            <div class="signature-line"></div>
+            <p>Client Signature</p>
+            <p>Date: ___________________</p>
+        </div>
+
+        <div class="signature-box">
+            <div class="signature-placeholder" style="height: 100px; border: 1px dashed #ccc; margin-bottom: 10px;">
+                <!-- Signature will be placed here -->
+            </div>
+            <div class="signature-line"></div>
+            <p>Authorized Representative</p>
+            <p>Date: ___________________</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>{{companyName}} | {{companyAddress}} | {{companyPhone}} | {{companyEmail}}</p>
+        <p class="confidential">CONFIDENTIAL - This document contains privileged information. Unauthorized disclosure is prohibited.</p>
+    </div>
+
+    <button class="btn btn-primary print-button" onclick="window.print()">
+        <i class="fas fa-print"></i> Print Report
+    </button>
+
+    <script>
+        // Add any client-side scripts here
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-insert current date in all date fields
+            document.querySelectorAll('.current-date').forEach(el => {
+                if (!el.textContent.trim()) {
+                    el.textContent = new Date().toLocaleDateString();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

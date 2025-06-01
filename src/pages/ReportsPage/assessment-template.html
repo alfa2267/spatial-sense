@@ -1,0 +1,185 @@
+{% extends "base-template.html" %}
+
+{% block content %}
+<div class="section">
+    <h2 class="section-title">1. Property Assessment</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>1.1 Property Details</h4>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Property Type</th>
+                    <td>{{property.type || 'Residential'}}</td>
+                </tr>
+                <tr>
+                    <th>Square Footage</th>
+                    <td>{{property.area || 'N/A'}} sq ft</td>
+                </tr>
+                <tr>
+                    <th>Year Built</th>
+                    <td>{{property.yearBuilt || 'N/A'}}</td>
+                </tr>
+                <tr>
+                    <th>Current System</th>
+                    <td>{{property.currentSystem || 'None'}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h4>1.2 Assessment Photos</h4>
+            <div class="row">
+                {% if property.photos && property.photos.length > 0 %}
+                    {% for photo in property.photos %}
+                    <div class="col-6 mb-3">
+                        <img src="{{photo}}" alt="Property photo {{loop.index}}" class="img-thumbnail" style="width: 100%; height: 150px; object-fit: cover;">
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">No photos available</div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2 class="section-title">2. Current System Analysis</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>2.1 Existing Components</h4>
+            <ul class="list-group">
+                {% for component in currentSystem.components %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{component.name}}
+                    <span class="badge bg-{{component.condition === 'Good' ? 'success' : 'warning'}} rounded-pill">
+                        {{component.condition || 'Needs Review'}}
+                    </span>
+                </li>
+                {% else %}
+                <li class="list-group-item">No existing components found</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h4>2.2 Issues Identified</h4>
+            <div class="list-group">
+                {% for issue in issues %}
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{issue.title}}</h5>
+                        <span class="badge bg-{{issue.severity === 'High' ? 'danger' : issue.severity === 'Medium' ? 'warning' : 'info'}}">
+                            {{issue.severity || 'Low'}}
+                        </span>
+                    </div>
+                    <p class="mb-1">{{issue.description}}</p>
+                    <small>Recommendation: {{issue.recommendation || 'No specific recommendation'}}</small>
+                </div>
+                {% else %}
+                <div class="alert alert-success">No critical issues found</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2 class="section-title">3. Recommendations</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>3.1 Priority Recommendations</h4>
+            <div class="accordion" id="recommendationsAccordion">
+                {% for rec in recommendations %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading{{loop.index}}">
+                        <button class="accordion-button {{'collapsed' if not loop.first}}" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapse{{loop.index}}" aria-expanded="{{'true' if loop.first else 'false'}}" 
+                                aria-controls="collapse{{loop.index}}">
+                            {{rec.title}}
+                            <span class="badge bg-{{rec.priority === 'High' ? 'danger' : rec.priority === 'Medium' ? 'warning' : 'info'}} ms-2">
+                                {{rec.priority}} Priority
+                            </span>
+                        </button>
+                    </h2>
+                    <div id="collapse{{loop.index}}" class="accordion-collapse collapse {{'show' if loop.first else ''}}" 
+                         aria-labelledby="heading{{loop.index}}" data-bs-parent="#recommendationsAccordion">
+                        <div class="accordion-body">
+                            <p>{{rec.description}}</p>
+                            <p><strong>Estimated Cost:</strong> {{rec.estimatedCost || 'To be determined'}}</p>
+                            <p><strong>Estimated ROI:</strong> {{rec.roi || 'N/A'}}</p>
+                            {% if rec.image %}
+                            <img src="{{rec.image}}" alt="Recommendation {{loop.index}}" class="img-fluid mt-2">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-info">No specific recommendations at this time.</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h4>3.2 Cost-Benefit Analysis</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Recommendation</th>
+                            <th>Cost</th>
+                            <th>Annual Savings</th>
+                            <th>ROI Period</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rec in recommendations %}
+                        <tr>
+                            <td>{{rec.title}}</td>
+                            <td>{{rec.cost || 'N/A'}}</td>
+                            <td>{{rec.annualSavings || 'N/A'}}</td>
+                            <td>{{rec.roiPeriod || 'N/A'}}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">No data available</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <h4 class="mt-4">3.3 Summary</h4>
+            <div class="card bg-light">
+                <div class="card-body">
+                    <p>{{summary || 'Based on our assessment, we recommend implementing the above recommendations to improve your property\'s efficiency and functionality.'}}</p>
+                    <p><strong>Next Steps:</strong> {{nextSteps || 'Please contact our team to discuss implementation options and scheduling.'}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2 class="section-title">4. Attachments</h2>
+    <div class="list-group">
+        {% for attachment in attachments %}
+        <a href="{{attachment.url}}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{attachment.name}}</h5>
+                <small>{{attachment.date || 'N/A'}}</small>
+            </div>
+            <p class="mb-1">{{attachment.description || 'No description available'}}</p>
+            <small>Click to download</small>
+        </a>
+        {% else %}
+        <div class="alert alert-info">No attachments available</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Additional scripts specific to assessment reports
+</script>
+{% endblock %}

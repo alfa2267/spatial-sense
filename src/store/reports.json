@@ -1,0 +1,121 @@
+{
+  "reports": [
+    {
+      "id": "rep-2023-001",
+      "title": "Q2 2023 London Residential Market Analysis",
+      "type": "market",
+      "dateGenerated": "2023-07-15T10:30:00Z",
+      "periodCovered": {
+        "startDate": "2023-04-01",
+        "endDate": "2023-06-30"
+      },
+      "location": "London, UK",
+      "propertyType": "residential",
+      "summary": "Comprehensive analysis of the London residential property market for Q2 2023, highlighting key trends and investment opportunities.",
+      "keyFindings": [
+        "5.2% average price increase in prime central London",
+        "Increased demand for properties with outdoor space",
+        "Rental yields remain stable at 3.8% on average"
+      ],
+      "status": "published",
+      "author": "Jane Smith",
+      "fileSize": "4.2MB",
+      "format": "PDF"
+    },
+    {
+      "id": "rep-2023-002",
+      "title": "Manchester Office Space Demand Forecast",
+      "type": "forecast",
+      "dateGenerated": "2023-08-02T14:15:00Z",
+      "periodCovered": {
+        "startDate": "2023-08-01",
+        "endDate": "2024-07-31"
+      },
+      "location": "Manchester, UK",
+      "propertyType": "commercial",
+      "summary": "Twelve-month forecast for office space demand in Manchester city center, including impact of hybrid work models.",
+      "keyFindings": [
+        "15% increase in demand for flexible office spaces",
+        "Grade A office vacancy rate at 8.2%",
+        "Average lease length decreasing to 4.2 years"
+      ],
+      "status": "published",
+      "author": "Michael Brown",
+      "fileSize": "2.8MB",
+      "format": "PDF"
+    },
+    {
+      "id": "rep-2023-003",
+      "title": "Birmingham Retail Market Review Q3 2023",
+      "type": "market",
+      "dateGenerated": "2023-10-10T11:45:00Z",
+      "periodCovered": {
+        "startDate": "2023-07-01",
+        "endDate": "2023-09-30"
+      },
+      "location": "Birmingham, UK",
+      "propertyType": "retail",
+      "summary": "Quarterly review of Birmingham's retail property market, analyzing footfall, rents, and tenant demand.",
+      "keyFindings": [
+        "12% increase in city center footfall",
+        "Prime retail rents stable at £250 per sq ft",
+        "Growth in food and beverage sector occupancy"
+      ],
+      "status": "published",
+      "author": "Sarah Johnson",
+      "fileSize": "3.5MB",
+      "format": "PDF"
+    },
+    {
+      "id": "rep-2023-004",
+      "title": "UK Student Housing Investment Analysis",
+      "type": "investment",
+      "dateGenerated": "2023-09-18T09:20:00Z",
+      "periodCovered": {
+        "startDate": "2023-01-01",
+        "endDate": "2023-12-31"
+      },
+      "location": "United Kingdom",
+      "propertyType": "student",
+      "summary": "Comprehensive analysis of investment opportunities in the UK student housing sector for the 2023/24 academic year.",
+      "keyFindings": [
+        "7.8% average annual rental growth",
+        "Strong demand in Russell Group university cities",
+        "Increasing international student numbers"
+      ],
+      "status": "draft",
+      "author": "David Wilson",
+      "fileSize": "5.1MB",
+      "format": "PDF"
+    },
+    {
+      "id": "rep-2023-005",
+      "title": "Edinburgh New Build Market Update",
+      "type": "market",
+      "dateGenerated": "2023-11-05T13:10:00Z",
+      "periodCovered": {
+        "startDate": "2023-10-01",
+        "endDate": "2023-12-31"
+      },
+      "location": "Edinburgh, UK",
+      "propertyType": "residential",
+      "summary": "Analysis of the new build residential market in Edinburgh, including pricing trends and development pipeline.",
+      "keyFindings": [
+        "8.5% price premium for new builds",
+        "Strong demand for energy-efficient properties",
+        "Average time to sell reduced to 28 days"
+      ],
+      "status": "published",
+      "author": "Emma Thompson",
+      "fileSize": "3.2MB",
+      "format": "PDF"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2023-11-15T16:20:00Z",
+    "totalReports": 5,
+    "reportTypes": ["market", "forecast", "investment"],
+    "propertyTypes": ["residential", "commercial", "retail", "student"],
+    "locations": ["London, UK", "Manchester, UK", "Birmingham, UK", "United Kingdom", "Edinburgh, UK"]
+  }
+}

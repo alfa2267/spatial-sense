@@ -1,0 +1,119 @@
+{% extends "base-template.html" %}
+
+{% block content %}
+<div class="section">
+    <h2 class="section-title">1. Executive Summary</h2>
+    <p>{{executiveSummary || 'This proposal outlines the recommended smart home automation solutions for your property. Our team has carefully analyzed your requirements and developed a comprehensive plan to meet your needs.'}}</p>
+</div>
+
+<div class="section">
+    <h2 class="section-title">2. Project Scope</h2>
+    <h4>2.1 Included Services</h4>
+    <ul>
+        {% for item in scope.included %}
+            <li>{{item}}</li>
+        {% else %}
+            <li>Smart lighting control system</li>
+            <li>Climate control automation</li>
+            <li>Security system integration</li>
+            <li>Audio/Video distribution</li>
+        {% endfor %}
+    </ul>
+    
+    <h4>2.2 Exclusions</h4>
+    <ul>
+        {% for item in scope.excluded %}
+            <li>{{item}}</li>
+        {% else %}
+            <li>Structural modifications</li>
+            <li>Electrical work requiring permits</li>
+            <li>Furniture moving or modifications</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="section">
+    <h2 class="section-title">3. Proposed Solution</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>3.1 System Components</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Qty</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in components %}
+                    <tr>
+                        <td>{{item.name}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.unitPrice | currency}}</td>
+                        <td>{{item.total | currency}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
+                        <td><strong>{{subtotal | currency}}</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-end">Tax ({{taxRate * 100}}%):</td>
+                        <td>{{taxAmount | currency}}</td>
+                    </tr>
+                    <tr class="table-active">
+                        <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                        <td><strong>{{total | currency}}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h4>3.2 System Diagram</h4>
+            <div class="system-diagram" style="border: 1px solid #eee; padding: 15px; min-height: 300px; text-align: center;">
+                {% if systemDiagram %}
+                    <img src="{{systemDiagram}}" alt="System Diagram" style="max-width: 100%;">
+                {% else %}
+                    <p class="text-muted">System diagram will be included in the final proposal</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2 class="section-title">4. Implementation Timeline</h2>
+    <div class="timeline">
+        {% for phase in timeline %}
+        <div class="timeline-item">
+            <h5>{{phase.name}}</h5>
+            <p><strong>Duration:</strong> {{phase.duration}}<br>
+            <strong>Start Date:</strong> {{phase.startDate}}<br>
+            <strong>Status:</strong> <span class="badge bg-{{phase.status === 'Completed' ? 'success' : 'primary'}}">{{phase.status}}</span></p>
+            <p>{{phase.description}}</p>
+        </div>
+        {% else %}
+        <div class="timeline-item">
+            <p>Timeline will be defined during project kickoff</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="section">
+    <h2 class="section-title">5. Terms & Conditions</h2>
+    <div class="terms">
+        {{termsAndConditions | default('Standard terms and conditions apply. Payment terms: 50% deposit required to begin work, 25% upon equipment delivery, and 25% upon completion. Warranty: 1 year on all equipment and labor.')}}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Additional scripts specific to proposals
+</script>
+{% endblock %}

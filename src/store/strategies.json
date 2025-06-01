@@ -1,0 +1,155 @@
+[
+  {
+    "id": "strat-001",
+    "type": "home_automation",
+    "name": "Morning Routine",
+    "description": "Automated morning routine to start the day right",
+    "category": "Routine",
+    "icon": "sun",
+    "status": "active",
+    "devices": [
+      {"type": "Lights", "icon": "lightbulb", "count": 3, "status": "included"},
+      {"type": "Thermostat", "icon": "thermometer-half", "count": 1, "status": "included"},
+      {"type": "Coffee Maker", "icon": "coffee", "count": 1, "status": "included"}
+    ],
+    "recommendedDevices": [
+      {"type": "Smart Blinds", "icon": "window-maximize", "count": 2, "reason": "Enhance natural light control"},
+      {"type": "Smart Speaker", "icon": "volume-up", "count": 1, "reason": "Add voice control and morning briefing"}
+    ],
+    "triggers": [
+      {"type": "Time", "value": "7:00 AM", "days": ["Mon", "Tue", "Wed", "Thu", "Fri"]},
+      {"type": "Motion", "value": "Bedroom Motion Detected", "condition": "After 6:00 AM"}
+    ],
+    "actions": [
+      "Gradually increase bedroom lights to 50%",
+      "Set thermostat to 21°C",
+      "Start coffee maker",
+      "Open bedroom blinds to 30%"
+    ],
+    "estimatedSavings": "15% energy reduction",
+    "implementationEffort": "Low",
+    "lastRun": "2023-05-22T07:02:34Z",
+    "nextRun": "2023-05-23T07:00:00Z",
+    "createdAt": "2023-04-15T10:30:00Z",
+    "updatedAt": "2023-05-22T08:15:22Z"
+  },
+  {
+    "id": "strat-002",
+    "type": "home_automation",
+    "name": "Away Mode",
+    "description": "Energy saving mode when no one is home",
+    "category": "Security",
+    "icon": "house-user",
+    "status": "active",
+    "devices": [
+      {"type": "Lights", "icon": "lightbulb", "count": 8, "status": "included"},
+      {"type": "Thermostat", "icon": "thermometer-half", "count": 1, "status": "included"},
+      {"type": "Cameras", "icon": "video", "count": 3, "status": "included"}
+    ],
+    "recommendedDevices": [
+      {"type": "Smart Plugs", "icon": "plug", "count": 3, "reason": "Control additional electronics"},
+      {"type": "Door/Window Sensors", "icon": "door-closed", "count": 4, "reason": "Enhance security monitoring"}
+    ],
+    "triggers": [
+      {"type": "Location", "value": "All residents left home"},
+      {"type": "Manual", "value": "Activated via app"}
+    ],
+    "actions": [
+      "Turn off all non-essential lights",
+      "Set thermostat to energy-saving mode (18°C)",
+      "Enable security cameras",
+      "Send notification if motion is detected"
+    ],
+    "estimatedSavings": "25% energy reduction",
+    "implementationEffort": "Medium",
+    "lastRun": "2023-05-22T08:30:12Z",
+    "nextRun": "When triggered",
+    "createdAt": "2023-03-10T14:20:00Z",
+    "updatedAt": "2023-05-21T09:45:18Z"
+  },
+  {
+    "id": "strat-003",
+    "type": "home_automation",
+    "name": "Evening Wind Down",
+    "description": "Gradual transition to evening and bedtime",
+    "category": "Routine",
+    "icon": "moon",
+    "status": "active",
+    "devices": [
+      {"type": "Lights", "icon": "lightbulb", "count": 5, "status": "included"},
+      {"type": "Thermostat", "icon": "thermometer-half", "count": 1, "status": "included"},
+      {"type": "Smart Blinds", "icon": "window-maximize", "count": 3, "status": "included"}
+    ],
+    "recommendedDevices": [
+      {"type": "Smart Bulbs", "icon": "lightbulb", "count": 2, "reason": "Adjustable color temperature for better sleep"},
+      {"type": "Smart Plug", "icon": "plug", "count": 1, "reason": "Control bedside lamps"}
+    ],
+    "triggers": [
+      {"type": "Time", "value": "9:00 PM", "days": ["Sun", "Mon", "Tue", "Wed", "Thu"]},
+      {"type": "Sunset", "value": "30 minutes after sunset"}
+    ],
+    "actions": [
+      "Gradually dim lights to 30%",
+      "Adjust lights to warmer color temperature",
+      "Close living room blinds",
+      "Set thermostat to 20°C"
+    ],
+    "estimatedSavings": "10% energy reduction",
+    "implementationEffort": "Low",
+    "lastRun": "2023-05-22T21:05:45Z",
+    "nextRun": "2023-05-23T21:00:00Z",
+    "createdAt": "2023-02-28T16:45:00Z",
+    "updatedAt": "2023-05-20T10:30:15Z"
+  },
+  {
+    "id": "PRJ-123456-001",
+    "type": "client_project",
+    "clientId": "550e8400-e29b-41d4-a716-446655440000",
+    "clientName": "Sarah Johnson",
+    "name": "Smart Home Automation",
+    "property": "3-bed Victorian, Kensington",
+    "description": "Full home automation including lighting, climate, and security",
+    "status": "in_progress",
+    "startDate": "2023-01-15T00:00:00.000Z",
+    "targetDate": "2023-06-30T00:00:00.000Z",
+    "budget": 25000,
+    "progress": 65,
+    "notes": "Client wants to expand the system to include outdoor lighting",
+    "createdAt": "2023-01-15T09:30:00.000Z",
+    "updatedAt": "2023-05-20T14:25:00.000Z"
+  },
+  {
+    "id": "PRJ-123457-001",
+    "type": "client_project",
+    "clientId": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+    "clientName": "Marcus Chen",
+    "name": "Office Security Upgrade",
+    "property": "Chen Enterprises HQ, Manchester",
+    "description": "Upgrade security system with new cameras and access control",
+    "status": "planning",
+    "startDate": "2023-03-01T00:00:00.000Z",
+    "targetDate": "2023-09-30T00:00:00.000Z",
+    "budget": 18000,
+    "progress": 15,
+    "notes": "Waiting for client approval on the proposed system design",
+    "createdAt": "2023-02-20T11:15:00.000Z",
+    "updatedAt": "2023-05-18T16:45:00.000Z"
+  },
+  {
+    "id": "PRJ-123458-001",
+    "type": "client_project",
+    "clientId": "7c9e6679-7425-40de-944b-b77f707d3c7a",
+    "clientName": "Emma Wilson",
+    "name": "Office Automation",
+    "property": "Wilson Innovations HQ, Birmingham",
+    "description": "Complete office automation including meeting rooms and common areas",
+    "status": "in_progress",
+    "startDate": "2023-02-15T00:00:00.000Z",
+    "targetDate": "2023-08-31T00:00:00.000Z",
+    "budget": 35000,
+    "progress": 30,
+    "notes": "Phase 1 completed, starting phase 2 next week",
+    "createdAt": "2023-02-05T10:00:00.000Z",
+    "updatedAt": "2023-05-22T10:30:00.000Z"
+  }
+]

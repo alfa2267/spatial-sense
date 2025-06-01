@@ -1,0 +1,142 @@
+/* Search Results Styles */
+.search-results-container {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 500px;
+    max-height: 70vh;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1060;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.2s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.search-results-container.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.search-result-type {
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.search-result-type:last-child {
+    border-bottom: none;
+}
+
+.search-result-type h6 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding-bottom: 0.5rem;
+    margin: 0;
+}
+
+.search-result-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-result-item:hover {
+    background-color: #f8f9fa;
+}
+
+.search-result-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.search-result-icon i {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.search-result-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.search-result-content h6 {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #212529;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-result-content p {
+    margin: 0.25rem 0 0;
+    font-size: 0.8125rem;
+    color: #6c757d;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.search-result-item .badge {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    margin-top: 0.5rem;
+    text-transform: capitalize;
+}
+
+.search-result-empty {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.search-result-empty i {
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .search-results-container {
+        position: fixed;
+        top: 60px;
+        left: 10px;
+        right: 10px;
+        width: auto;
+        max-height: 60vh;
+    }
+    
+    .search-result-item {
+        padding: 0.5rem;
+    }
+    
+    .search-result-icon {
+        width: 28px;
+        height: 28px;
+    }
+}

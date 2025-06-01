@@ -1,25 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { CssBaseline, ThemeProvider, Box, CircularProgress } from '@mui/material';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { Provider } from 'react-redux';
+import { Suspense } from 'react';
+import { RouterProvider } from 'react-router-dom';
+
+// Theme and styles
+import { theme } from './styles/theme';
+import { GlobalStyles } from './styles/GlobalStyles';
+import { store } from './store/store';
+import { queryClient } from './services/api';
+import router from './routes';
+
+// Loading component for Suspense fallback
+const LoadingFallback = () => (
+  <Box
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    minHeight="100vh"
+  >
+    <CircularProgress />
+  </Box>
+);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <GlobalStyles />
+          <Suspense fallback={<LoadingFallback />}>
+            <RouterProvider router={router} />
+          </Suspense>
+        </ThemeProvider>
+      </Provider>
+    </QueryClientProvider>
   );
 }
 
