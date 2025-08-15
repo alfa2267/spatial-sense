@@ -107,7 +107,7 @@ project:
   category: "web-app"
   tech_stack: ["React", "Node.js"]
   demo_url: "alfa2267.github.io/spatial-sense"
-  repo_url: "https://github.com/alfa2267/SpatialSense"
+  repo_url: "https://github.com/alfa2267/spatial-sense"
   priority: 4
   show_in_nav: true
   icon: "planet"
