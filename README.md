@@ -96,6 +96,30 @@ We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Support
 
-For support or questions, please contact me.
+<!-- PROJECT-META-START -->
+```yaml
+project:
+  name: "Spatial Sense"
+  slug: "spatial-sense"
+  description: "SpatialSense is a comprehensive automation platform designed specifically for consultants to streamline their workflow, manage client engagements, and deliver exceptional value. This all-in-one solution helps consultants efficiently handle client data, project management, strategy development, and reporting from a single, intuitive interface"
+  status: "active"
+  category: "web-app"
+  tech_stack: ["React", "Node.js"]
+  demo_url: "alfa2267.github.io/spatial-sense"
+  repo_url: "https://github.com/alfa2267/SpatialSense"
+  priority: 4
+  show_in_nav: true
+  icon: "planet"
+  metrics:
+    business_value: 450    # 0-500 scale - How valuable/useful is this project?
+    complexity: 480       # 0-500 scale - How complex was it to build?
+    time_spent: 300       # 0-500 scale - Relative time investment
+    fun_rating: 300       # 0-500 scale - How enjoyable was it to work on?
+  features:
+    - "Client & Project Management"
+    - "Analysis & Reporting"
+  created_date: "2025-06-15"
+  updated_date: "2025-08-15"
+```
+<!-- PROJECT-META-END -->
