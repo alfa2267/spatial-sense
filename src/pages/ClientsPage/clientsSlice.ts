@@ -77,14 +77,21 @@ const clientsSlice = createSlice({
       })
       .addCase(fetchClients.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.clients = action.payload;
+        state.clients = action.payload.map(client => ({
+          ...client,
+          address: typeof client.address === 'string' ? client.address : client.address
+        }));
       })
       .addCase(fetchClients.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || 'Failed to fetch clients';
       })
       .addCase(addNewClient.fulfilled, (state, action) => {
-        state.clients.push(action.payload);
+        const client = {
+          ...action.payload,
+          address: typeof action.payload.address === 'string' ? action.payload.address : action.payload.address
+        };
+        state.clients.push(client);
       })
       .addCase(updateExistingClient.fulfilled, (state, action) => {
         const { id } = action.payload;
