@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkspatialsense_temp=self.webpackChunkspatialsense_temp||[]).push([[894],{3894:(e,s,t)=>{t.r(s),t.d(s,{default:()=>a});var n=t(3969),c=t(5895),i=t(4799),l=t(579);const a=()=>(0,l.jsxs)(n.A,{children:[(0,l.jsx)(c.A,{variant:"h4",component:"h1",gutterBottom:!0,children:"Devices"}),(0,l.jsx)(i.A,{sx:{p:3,mt:2},children:(0,l.jsx)(c.A,{children:"Devices content will be displayed here."})})]})}}]);
+//# sourceMappingURL=894.d7da94bb.chunk.js.map
