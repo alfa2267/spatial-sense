@@ -4,18 +4,21 @@
   <meta charset="utf-8">
   <title>Redirecting...</title>
   <script>
-    // Get the current path
+    // Get the current path and clean it up
     const path = window.location.pathname;
     const base = '/spatial-sense';
     
-    // Remove any existing base path and any index.html references
+    // Remove any existing base path
     let cleanPath = path.startsWith(base) ? path.slice(base.length) : path;
-    cleanPath = cleanPath.replace(/^\/index\.html/, '');
     
-    // Only redirect if we're not already on index.html to prevent loops
-    if (!window.location.href.includes('/index.html')) {
-      // Build the new URL
-      const newUrl = `${base}/index.html${cleanPath}${window.location.search}${window.location.hash}`;
+    // Remove any leading/trailing slashes and index.html
+    cleanPath = cleanPath.replace(/^\/+|\/+$/g, '').replace(/^index\.html\/?/, '');
+    
+    // Build the new URL
+    const newUrl = `${base}/${cleanPath ? cleanPath + '/' : ''}index.html${window.location.search}${window.location.hash}`;
+    
+    // Only redirect if we're not already on the correct URL
+    if (window.location.href !== newUrl) {
       window.history.replaceState({}, '', newUrl);
       window.location.reload();
     }
