@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   Box, 
   Typography, 
@@ -8,8 +8,7 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { Strategy } from '../../types/domains/strategy.types';
-import { dataService } from '../../services/data/dataService';
-import { ApiResponse } from '../../types/api/response.types';
+import { useStrategies } from '../../hooks/useStrategies';
 import { 
   PageContainer, 
   PageHeader, 
@@ -20,30 +19,7 @@ import {
 } from '../../components';
 
 const StrategiesPage = () => {
-  const [strategies, setStrategies] = useState<Strategy[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const loadStrategies = async () => {
-      try {
-        setLoading(true);
-        const response: ApiResponse<Strategy[]> = await dataService.fetch('/strategies');
-        if (response.success && response.data) {
-          setStrategies(response.data);
-        } else {
-          setError('Failed to load strategies');
-        }
-      } catch (err) {
-        console.error('Error loading strategies:', err);
-        setError('An error occurred while loading strategies');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadStrategies();
-  }, []);
+  const { data: strategies = [], isLoading: loading, error } = useStrategies();
 
   const handleCreateStrategy = () => {
     // Navigate to create strategy page or open a dialog
@@ -67,7 +43,7 @@ const StrategiesPage = () => {
 
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
+          {error.message || 'An error occurred while loading strategies'}
         </Alert>
       )}
 
