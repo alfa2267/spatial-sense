@@ -84,7 +84,7 @@ export const StrategyDeviceModal: React.FC<StrategyDeviceModalProps> = ({
         <Divider />
         <DialogContent>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Device Name"
@@ -95,7 +95,7 @@ export const StrategyDeviceModal: React.FC<StrategyDeviceModalProps> = ({
                 required
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <TextField
                 fullWidth
                 label="Quantity"
@@ -108,7 +108,7 @@ export const StrategyDeviceModal: React.FC<StrategyDeviceModalProps> = ({
                 inputProps={{ min: 1 }}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <TextField
                 fullWidth
                 label="Unit Cost (£)"
@@ -121,7 +121,7 @@ export const StrategyDeviceModal: React.FC<StrategyDeviceModalProps> = ({
                 inputProps={{ step: '0.01', min: 0 }}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Description"
@@ -133,13 +133,13 @@ export const StrategyDeviceModal: React.FC<StrategyDeviceModalProps> = ({
                 rows={2}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControl fullWidth margin="normal">
                 <InputLabel>Category</InputLabel>
                 <Select
                   name="category"
                   value={formData.category}
-                  onChange={handleChange}
+                  onChange={(e) => handleChange(e as React.ChangeEvent<HTMLInputElement>)}
                   label="Category"
                 >
                   <MenuItem value="sensor">Sensor</MenuItem>
@@ -150,7 +150,7 @@ export const StrategyDeviceModal: React.FC<StrategyDeviceModalProps> = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Manufacturer"
@@ -160,7 +160,7 @@ export const StrategyDeviceModal: React.FC<StrategyDeviceModalProps> = ({
                 margin="normal"
               />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Model"
@@ -170,7 +170,7 @@ export const StrategyDeviceModal: React.FC<StrategyDeviceModalProps> = ({
                 margin="normal"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Specifications"
@@ -183,7 +183,7 @@ export const StrategyDeviceModal: React.FC<StrategyDeviceModalProps> = ({
                 placeholder="Enter technical specifications, requirements, or notes..."
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Box mt={1}>
                 <Typography variant="subtitle2" color="text.secondary">
                   Total Cost: £{(formData.quantity * formData.unitCost).toFixed(2)}

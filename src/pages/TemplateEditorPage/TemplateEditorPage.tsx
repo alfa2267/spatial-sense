@@ -142,7 +142,7 @@ const TemplateEditorPage = () => {
 
 
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -172,7 +172,7 @@ const TemplateEditorPage = () => {
                 <Select
                   name="category"
                   value={template.category}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e as React.ChangeEvent<HTMLInputElement>)}
                   label="Category"
                 >
                   <MenuItem value="email">Email</MenuItem>
@@ -197,7 +197,7 @@ const TemplateEditorPage = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Card>
             <CardContent>
               <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 1, mb: 2 }}>
@@ -246,12 +246,12 @@ const TemplateEditorPage = () => {
                         </Tooltip>
                         <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
                         <Tooltip title="Insert Link">
-                          <IconButton onClick={() => formatText('createLink', prompt('Enter URL:'))} size="small">
+                          <IconButton onClick={() => formatText('createLink', prompt('Enter URL:') || '')} size="small">
                             <LinkIcon />
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Insert Image">
-                          <IconButton onClick={() => formatText('insertImage', prompt('Image URL:'))} size="small">
+                          <IconButton onClick={() => formatText('insertImage', prompt('Image URL:') || '')} size="small">
                             <ImageIcon />
                           </IconButton>
                         </Tooltip>

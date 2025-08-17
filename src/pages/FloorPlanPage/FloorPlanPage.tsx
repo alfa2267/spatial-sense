@@ -31,7 +31,7 @@ const RoomNode = ({ data }: { data: any }) => {
 };
 
 // Custom Device Node Component
-const DeviceNode = ({ data }) => {
+const DeviceNode = ({ data }: { data: any }) => {
   return (
     <div className="device-node">
       <div className="device-icon" style={{ color: data.color }}>
@@ -69,7 +69,7 @@ const FloorPlanEditor = () => {
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [message, setMessage] = useState('Ready to import floor plan');
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Roboflow API configuration
   const ROBOFLOW_API_KEY = "YOUR_API_KEY_HERE"; // Replace with your actual API key
@@ -77,7 +77,7 @@ const FloorPlanEditor = () => {
 
   // Connect nodes
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge({ ...params, animated: true }, eds)),
+    (params: any) => setEdges((eds) => addEdge({ ...params, animated: true }, eds)),
     [setEdges]
   );
 
@@ -89,7 +89,7 @@ const FloorPlanEditor = () => {
 
   // Upload and analyze floor plan
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files[0];
+    const file = event.target.files?.[0];
     if (!file) return;
 
     // Show background image
@@ -376,7 +376,7 @@ const FloorPlanEditor = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .floor-plan-app {
           height: 100vh;
           display: flex;
