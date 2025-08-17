@@ -1,0 +1,40 @@
+{
+  "clients": [
+    {
+      "id": "1",
+      "name": "Sarah Johnson",
+      "email": "sarah.johnson@example.com",
+      "phone": "+44 7123 456789",
+      "company": "Johnson & Associates",
+      "address": "123 Smart Street, London, SW1A 1AA, UK",
+      "status": "active",
+      "notes": "Interested in full home automation system. Has a Victorian house in Kensington.",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-20T14:45:00Z"
+    },
+    {
+      "id": "2",
+      "name": "Marcus Chen",
+      "email": "marcus.chen@techcorp.com",
+      "phone": "+44 7987 654321",
+      "company": "TechCorp Solutions",
+      "address": "456 Innovation Ave, Shoreditch, London, E1 6AN, UK",
+      "status": "lead",
+      "notes": "Looking for smart office solutions. Modern apartment in Shoreditch.",
+      "createdAt": "2024-02-01T09:15:00Z",
+      "updatedAt": "2024-02-05T11:20:00Z"
+    },
+    {
+      "id": "3",
+      "name": "Elena Rodriguez",
+      "email": "elena.rodriguez@example.com",
+      "phone": "+44 7456 123456",
+      "company": "Rodriguez Estates",
+      "address": "789 Park Lane, Mayfair, London, W1K 1QE, UK",
+      "status": "inactive",
+      "notes": "Previously installed smart lighting. May be interested in upgrades.",
+      "createdAt": "2023-11-20T14:00:00Z",
+      "updatedAt": "2024-01-10T16:30:00Z"
+    }
+  ]
+}
