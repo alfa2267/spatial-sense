@@ -1,0 +1,40 @@
+{
+  "activeClients": 24,
+  "clientGrowth": 12.5,
+  "activeProjects": 8,
+  "projectGrowth": 14.3,
+  "monthlyRevenue": 12500,
+  "revenueGrowth": 8.7,
+  "clientRating": 4.7,
+  "reviewCount": 42,
+  "recentProjects": [
+    {
+      "client": "Sarah Johnson",
+      "property": "3 Bedroom House, London",
+      "status": "In Progress",
+      "value": 3500,
+      "lastUpdated": "2025-05-20T14:30:00Z"
+    },
+    {
+      "client": "Marcus Chen",
+      "property": "2 Bedroom Flat, Manchester",
+      "status": "Site Visit",
+      "value": 2800,
+      "lastUpdated": "2025-05-19T10:15:00Z"
+    },
+    {
+      "client": "Aisha Patel",
+      "property": "4 Bedroom House, Birmingham",
+      "status": "Planning",
+      "value": 4200,
+      "lastUpdated": "2025-05-18T16:45:00Z"
+    },
+    {
+      "client": "David Wilson",
+      "property": "5 Bedroom House, Edinburgh",
+      "status": "Completed",
+      "value": 5200,
+      "lastUpdated": "2025-05-15T11:20:00Z"
+    }
+  ]
+}

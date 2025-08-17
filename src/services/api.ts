@@ -27,11 +27,11 @@ const LOCAL_STORAGE_KEY = 'spatial-sense-data';
 
 // Initialize localStorage with default data if empty
 const initializeLocalStorage = async () => {
-  if (!localStorage.getItem(LOCAL_STORAGE_KEY)) {
+  if (!localStorage.getItem(`${LOCAL_STORAGE_KEY}-clients`)) {
     try {
       const response = await fetch(`${STATIC_DATA_BASE}/clients.json`);
       const data = await response.json();
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+      localStorage.setItem(`${LOCAL_STORAGE_KEY}-clients`, JSON.stringify(data));
     } catch (error) {
       console.error('Failed to initialize localStorage with default data:', error);
     }
@@ -41,7 +41,7 @@ const initializeLocalStorage = async () => {
 // Get data from localStorage or fallback to static file
 const getData = async (key: string) => {
   if (USE_STATIC_DATA) {
-    const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const storedData = localStorage.getItem(`${LOCAL_STORAGE_KEY}-${key}`);
     if (storedData) {
       return JSON.parse(storedData);
     }
@@ -52,9 +52,9 @@ const getData = async (key: string) => {
 };
 
 // Save data to localStorage
-const saveData = (data: any) => {
+const saveData = (key: string, data: any) => {
   if (USE_STATIC_DATA) {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}-${key}`, JSON.stringify(data));
   }
 };
 
@@ -96,7 +96,7 @@ export const getClients = async (): Promise<Client[]> => {
   
   try {
     const data = await getData('clients');
-    return data.clients || [];
+    return Array.isArray(data) ? data : (data.clients || []);
   } catch (error) {
     console.error('Error loading clients:', error);
     return [];
@@ -128,19 +128,35 @@ export const createClient = async (client: Omit<Client, 'id' | 'createdAt' | 'up
   };
   
   const updatedClients = [...clients, newClient];
-  saveData({ ...(await getData('clients')), clients: updatedClients });
+  saveData('clients', updatedClients);
   
   return newClient;
 };
 
 export const updateClient = async (id: string, client: Partial<Client>): Promise<Client> => {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
     return mockApiClients.update(id, client);
   }
-  return fetchData<Client>(`/clients/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(client),
-  });
+  
+  const clients = await getClients();
+  const clientIndex = clients.findIndex(c => c.id === id);
+  
+  if (clientIndex === -1) {
+    throw new Error('Client not found');
+  }
+  
+  const updatedClient: Client = {
+    ...clients[clientIndex],
+    ...client,
+    updatedAt: new Date().toISOString(),
+  };
+  
+  const updatedClients = [...clients];
+  updatedClients[clientIndex] = updatedClient;
+  
+  saveData('clients', updatedClients);
+  
+  return updatedClient;
 };
 
 export const deleteClient = async (id: string): Promise<void> => {
@@ -155,7 +171,7 @@ export const deleteClient = async (id: string): Promise<void> => {
     throw new Error('Client not found');
   }
   
-  saveData({ ...(await getData('clients')), clients: updatedClients });
+  saveData('clients', updatedClients);
 };
 
 // Projects

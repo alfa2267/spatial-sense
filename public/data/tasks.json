@@ -1,0 +1,42 @@
+[
+  {
+    "id": "task-1",
+    "title": "Complete Sarah's Report",
+    "time": "9:00 AM",
+    "priority": "high",
+    "status": "completed",
+    "completed": true
+  },
+  {
+    "id": "task-2",
+    "title": "Review Project Proposal",
+    "time": "11:30 AM",
+    "priority": "medium",
+    "status": "in-progress",
+    "completed": false
+  },
+  {
+    "id": "task-3",
+    "title": "Team Meeting",
+    "time": "2:00 PM",
+    "priority": "high",
+    "status": "pending",
+    "completed": false
+  },
+  {
+    "id": "task-4",
+    "title": "Update Project Timeline",
+    "time": "3:30 PM",
+    "priority": "low",
+    "status": "pending",
+    "completed": false
+  },
+  {
+    "id": "task-5",
+    "title": "Send Client Update",
+    "time": "4:45 PM",
+    "priority": "medium",
+    "status": "pending",
+    "completed": false
+  }
+]
