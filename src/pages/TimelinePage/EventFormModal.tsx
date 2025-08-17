@@ -416,7 +416,7 @@ const EventFormModal: React.FC<EventFormModalProps> = ({
                   name="status"
                   value={formData.status}
                   label="Status"
-                  onChange={(e) => handleChange('status', e.target.value as string)}
+                  onChange={(e) => handleChange('status', e.target.value as any)}
                 >
                   <MenuItem value="planned">
                     <Chip 
@@ -473,7 +473,7 @@ const EventFormModal: React.FC<EventFormModalProps> = ({
                   name="priority"
                   value={formData.priority}
                   label="Priority"
-                  onChange={(e) => handleChange('priority', e.target.value as string)}
+                  onChange={(e) => handleChange('priority', e.target.value as any)}
                 >
                   <MenuItem value="low">
                     <Chip 

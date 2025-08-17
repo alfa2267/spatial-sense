@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   TimelineEvent, 
   TimelineView as TimelineViewType,
-  Project,
+  TimelineProject as Project,
   TeamMember
 } from '../../types/domains/timeline.types';
 import { 
@@ -25,11 +25,11 @@ import {
   addDays, 
   startOfWeek, 
   endOfWeek, 
-  eachDayOfInterval,
+  // eachDayOfInterval,
   isToday,
   isBefore,
   isAfter,
-  parseISO
+  // parseISO
 } from 'date-fns';
 import { CalendarMonth, ViewWeek, Today, ListAlt } from '@mui/icons-material';
 

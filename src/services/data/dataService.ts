@@ -54,6 +54,7 @@ export class DataService {
         type: 'residential',
         team: ['user-001', 'user-002'],
         tags: ['residential', 'market-analysis', 'high-priority'],
+        createdBy: 'user-001',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       },

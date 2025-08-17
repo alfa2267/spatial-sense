@@ -1,7 +1,7 @@
 import { Box, Typography, Paper, Button } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { useState } from 'react';
-import type { TimelineEvent, Project, TeamMember, TimelineView as TimelineViewType } from '../../types/domains/timeline.types';
+import type { TimelineEvent, TimelineProject as Project, TeamMember, TimelineView as TimelineViewType } from '../../types/domains/timeline.types';
 import TimelineView from './TimelineView';
 import EventFormModal from './EventFormModal';
 import { useQuery } from '@tanstack/react-query';
@@ -72,7 +72,7 @@ const TimelinePage = () => {
       <Paper sx={{ p: 3, mt: 2 }}>
         <TimelineView
           view={view}
-          events={events}
+          events={events.map(event => ({ ...event, status: event.status as any, priority: event.priority as any }))}
           onEventClick={handleEventClick}
           selectedDate={new Date()}
           projects={projects}
