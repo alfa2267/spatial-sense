@@ -4,35 +4,32 @@
   <meta charset="utf-8">
   <title>Loading...</title>
   <script>
-    // This is a simple SPA fallback for GitHub Pages
-    // It redirects all 404s to index.html with the correct hash route
-    
-    // Get the current path and clean it up
-    const path = window.location.pathname;
-    const base = '/spatial-sense';
-    
-    // If we're already at the root with a hash, no need to redirect
-    if ((path === base + '/' || path === base + '/index.html') && window.location.hash) {
-      return;
-    }
-    
-    // If we're at the root with no hash, redirect to dashboard
-    if (path === base + '/' || path === base + '/index.html') {
-      window.location.replace(window.location.origin + base + '/#/dashboard');
-      return;
-    }
-    
-    // Extract the route part after the base
-    let route = path.startsWith(base) ? path.slice(base.length) : path;
-    
-    // Clean up the route (remove leading/trailing slashes and index.html)
-    route = route.replace(/^\/+|\/+$/g, '').replace(/index\.html$/, '');
-    
-    // If the route is not empty, redirect to hash-based URL
-    if (route) {
-      const newUrl = window.location.origin + base + '/#/' + route + window.location.search + window.location.hash;
-      window.location.replace(newUrl);
-    }
+    (function() {
+      // This is a simple SPA fallback for GitHub Pages
+      // It redirects all 404s to index.html with the correct hash route
+      
+      const path = window.location.pathname;
+      const base = '/spatial-sense';
+      
+      console.log('404 redirect script running. Path:', path);
+      
+      // Extract the route part after the base
+      let route = path.startsWith(base) ? path.slice(base.length) : path;
+      
+      // Clean up the route (remove leading/trailing slashes and index.html)
+      route = route.replace(/^\/+|\/+$/g, '').replace(/index\.html$/, '');
+      
+      console.log('Extracted route:', route);
+      
+      // Always redirect to the hash-based URL with the route
+      const newUrl = window.location.origin + base + '/#/' + (route || 'dashboard');
+      
+      console.log('Redirecting to:', newUrl);
+      
+      if (window.location.href !== newUrl) {
+        window.location.replace(newUrl);
+      }
+    })();
   </script>
   <noscript>
     <meta http-equiv="refresh" content="0; url=/spatial-sense/#/dashboard">
