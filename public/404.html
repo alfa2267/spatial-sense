@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script>
+    // Get the current path and redirect to /spatial-sense/index.html with the path
+    const path = window.location.pathname;
+    const base = '/spatial-sense';
+    
+    // Remove any existing base path to avoid double-prefixing
+    const cleanPath = path.startsWith(base) ? path.slice(base.length) : path;
+    
+    // Redirect to index.html with the path as a query parameter
+    window.location.href = `${base}/index.html${cleanPath}${window.location.search}${window.location.hash}`;
+  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=/spatial-sense/index.html">
+  </noscript>
+</head>
+<body>
+  <p>Redirecting to the application...</p>
+</body>
+</html>
