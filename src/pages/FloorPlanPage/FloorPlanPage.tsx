@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import ReactFlow, { 
   Node, 
   Edge, 
@@ -13,6 +13,7 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { saveFloorPlanEditor, loadFloorPlanEditor } from '../../services/api';
 
 // Custom Room Node Component
 const RoomNode = ({ data }: { data: any }) => {
@@ -70,6 +71,45 @@ const FloorPlanEditor = () => {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [message, setMessage] = useState('Ready to import floor plan');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Load saved data on component mount
+  useEffect(() => {
+    const loadSavedData = async () => {
+      try {
+        const savedData = await loadFloorPlanEditor();
+        if (savedData) {
+          setNodes(savedData.nodes || []);
+          setEdges(savedData.edges || []);
+          setBackgroundImage(savedData.backgroundImage || null);
+          showMessage('Floor plan loaded from storage');
+        }
+      } catch (error) {
+        console.error('Failed to load saved floor plan:', error);
+      }
+    };
+
+    loadSavedData();
+  }, []);
+
+  // Auto-save when nodes, edges, or background changes
+  useEffect(() => {
+    const saveData = async () => {
+      try {
+        await saveFloorPlanEditor({
+          nodes,
+          edges,
+          backgroundImage: backgroundImage || undefined
+        });
+      } catch (error) {
+        console.error('Failed to save floor plan:', error);
+      }
+    };
+
+    // Only save if there's actual data to save
+    if (nodes.length > 0 || edges.length > 0 || backgroundImage) {
+      saveData();
+    }
+  }, [nodes, edges, backgroundImage]);
 
   // Roboflow API configuration
   const ROBOFLOW_API_KEY = "YOUR_API_KEY_HERE"; // Replace with your actual API key
@@ -236,10 +276,18 @@ const FloorPlanEditor = () => {
     setConfirmOpen(false);
   };
 
-  const handleConfirmClear = () => {
+  const handleConfirmClear = async () => {
     setNodes([]);
     setEdges([]);
     setBackgroundImage(null);
+    
+    // Clear saved data as well
+    try {
+      await saveFloorPlanEditor({ nodes: [], edges: [] });
+    } catch (error) {
+      console.error('Failed to clear saved floor plan:', error);
+    }
+    
     showMessage('Canvas cleared');
     setConfirmOpen(false);
   };

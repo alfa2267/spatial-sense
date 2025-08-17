@@ -27,13 +27,17 @@ const LOCAL_STORAGE_KEY = 'spatial-sense-data';
 
 // Initialize localStorage with default data if empty
 const initializeLocalStorage = async () => {
-  if (!localStorage.getItem(`${LOCAL_STORAGE_KEY}-clients`)) {
-    try {
-      const response = await fetch(`${STATIC_DATA_BASE}/clients.json`);
-      const data = await response.json();
-      localStorage.setItem(`${LOCAL_STORAGE_KEY}-clients`, JSON.stringify(data));
-    } catch (error) {
-      console.error('Failed to initialize localStorage with default data:', error);
+  const entities = ['clients', 'strategies', 'invoices', 'floorplans', 'dashboard', 'projects', 'tasks', 'devices', 'events'];
+  
+  for (const entity of entities) {
+    if (!localStorage.getItem(`${LOCAL_STORAGE_KEY}-${entity}`)) {
+      try {
+        const response = await fetch(`${STATIC_DATA_BASE}/${entity}.json`);
+        const data = await response.json();
+        localStorage.setItem(`${LOCAL_STORAGE_KEY}-${entity}`, JSON.stringify(data));
+      } catch (error) {
+        console.error(`Failed to initialize localStorage for ${entity}:`, error);
+      }
     }
   }
 };
@@ -242,31 +246,97 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
 
 // Devices
 export const getDevices = async (): Promise<Device[]> => {
-  return fetchData<Device[]>('/devices');
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Device[]>('/devices');
+  }
+  
+  try {
+    const data = await getData('devices');
+    return Array.isArray(data) ? data : (data.devices || []);
+  } catch (error) {
+    console.error('Error loading devices:', error);
+    return [];
+  }
 };
 
 export const getDevice = async (id: string): Promise<Device> => {
-  return fetchData<Device>(`/devices/${id}`);
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Device>(`/devices/${id}`);
+  }
+  
+  const devices = await getDevices();
+  const device = devices.find(d => d.id === id);
+  if (!device) throw new Error('Device not found');
+  return device;
 };
 
 export const createDevice = async (device: CreateDeviceDTO): Promise<Device> => {
-  return fetchData<Device>('/devices', {
-    method: 'POST',
-    body: JSON.stringify(device),
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Device>('/devices', {
+      method: 'POST',
+      body: JSON.stringify(device),
+    });
+  }
+  
+  const devices = await getDevices();
+  const newDevice: Device = {
+    ...device,
+    id: Date.now().toString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  
+  const updatedDevices = [...devices, newDevice];
+  saveData('devices', updatedDevices);
+  
+  return newDevice;
 };
 
 export const updateDevice = async (id: string, device: UpdateDeviceDTO): Promise<Device> => {
-  return fetchData<Device>(`/devices/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(device),
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Device>(`/devices/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(device),
+    });
+  }
+  
+  const devices = await getDevices();
+  const deviceIndex = devices.findIndex(d => d.id === id);
+  
+  if (deviceIndex === -1) {
+    throw new Error('Device not found');
+  }
+  
+  const updatedDevice: Device = {
+    ...devices[deviceIndex],
+    ...device,
+    updatedAt: new Date().toISOString(),
+  };
+  
+  const updatedDevices = [...devices];
+  updatedDevices[deviceIndex] = updatedDevice;
+  
+  saveData('devices', updatedDevices);
+  
+  return updatedDevice;
 };
 
 export const deleteDevice = async (id: string): Promise<void> => {
-  await fetchData(`/devices/${id}`, {
-    method: 'DELETE',
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    await fetchData(`/devices/${id}`, {
+      method: 'DELETE',
+    });
+    return;
+  }
+  
+  const devices = await getDevices();
+  const updatedDevices = devices.filter(device => device.id !== id);
+  
+  if (updatedDevices.length === devices.length) {
+    throw new Error('Device not found');
+  }
+  
+  saveData('devices', updatedDevices);
 };
 
 // Events
@@ -276,37 +346,117 @@ export const getEvents = async (params: {
   startDate?: string;
   endDate?: string;
 } = {}): Promise<Event[]> => {
-  const query = new URLSearchParams();
-  if (params?.limit) query.append('limit', params.limit.toString());
-  if (params?.type) query.append('type', params.type);
-  if (params?.startDate) query.append('startDate', params.startDate);
-  if (params?.endDate) query.append('endDate', params.endDate);
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    const query = new URLSearchParams();
+    if (params?.limit) query.append('limit', params.limit.toString());
+    if (params?.type) query.append('type', params.type);
+    if (params?.startDate) query.append('startDate', params.startDate);
+    if (params?.endDate) query.append('endDate', params.endDate);
+    
+    return fetchData<Event[]>(`/events?${query.toString()}`);
+  }
   
-  return fetchData<Event[]>(`/events?${query.toString()}`);
+  try {
+    let data = await getData('events');
+    let events = Array.isArray(data) ? data : (data.events || []);
+    
+    // Apply filters
+    if (params.type) {
+      events = events.filter((event: Event) => event.type === params.type);
+    }
+    if (params.startDate) {
+      events = events.filter((event: Event) => event.timestamp >= params.startDate!);
+    }
+    if (params.endDate) {
+      events = events.filter((event: Event) => event.timestamp <= params.endDate!);
+    }
+    if (params.limit) {
+      events = events.slice(0, params.limit);
+    }
+    
+    return events;
+  } catch (error) {
+    console.error('Error loading events:', error);
+    return [];
+  }
 };
 
 export const getEvent = async (id: string): Promise<Event> => {
-  return fetchData<Event>(`/events/${id}`);
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Event>(`/events/${id}`);
+  }
+  
+  const events = await getEvents();
+  const event = events.find(e => e.id === id);
+  if (!event) throw new Error('Event not found');
+  return event;
 };
 
 export const createEvent = async (event: Omit<Event, 'id' | 'timestamp'>): Promise<Event> => {
-  return fetchData<Event>('/events', {
-    method: 'POST',
-    body: JSON.stringify(event),
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Event>('/events', {
+      method: 'POST',
+      body: JSON.stringify(event),
+    });
+  }
+  
+  const events = await getEvents();
+  const newEvent: Event = {
+    ...event,
+    id: Date.now().toString(),
+    timestamp: new Date().toISOString(),
+  };
+  
+  const updatedEvents = [...events, newEvent];
+  saveData('events', updatedEvents);
+  
+  return newEvent;
 };
 
 export const updateEvent = async (id: string, event: Partial<Event>): Promise<Event> => {
-  return fetchData<Event>(`/events/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(event),
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Event>(`/events/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(event),
+    });
+  }
+  
+  const events = await getEvents();
+  const eventIndex = events.findIndex(e => e.id === id);
+  
+  if (eventIndex === -1) {
+    throw new Error('Event not found');
+  }
+  
+  const updatedEvent: Event = {
+    ...events[eventIndex],
+    ...event,
+  };
+  
+  const updatedEvents = [...events];
+  updatedEvents[eventIndex] = updatedEvent;
+  
+  saveData('events', updatedEvents);
+  
+  return updatedEvent;
 };
 
 export const deleteEvent = async (id: string): Promise<void> => {
-  await fetchData(`/events/${id}`, {
-    method: 'DELETE',
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    await fetchData(`/events/${id}`, {
+      method: 'DELETE',
+    });
+    return;
+  }
+  
+  const events = await getEvents();
+  const updatedEvents = events.filter(event => event.id !== id);
+  
+  if (updatedEvents.length === events.length) {
+    throw new Error('Event not found');
+  }
+  
+  saveData('events', updatedEvents);
 };
 
 // Invoices
@@ -316,66 +466,348 @@ export const getInvoices = async (params: {
   startDate?: string;
   endDate?: string;
 } = {}): Promise<Invoice[]> => {
-  const query = new URLSearchParams();
-  if (params?.clientId) query.append('clientId', params.clientId);
-  if (params?.status) query.append('status', params.status);
-  if (params?.startDate) query.append('startDate', params.startDate);
-  if (params?.endDate) query.append('endDate', params.endDate);
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    const query = new URLSearchParams();
+    if (params?.clientId) query.append('clientId', params.clientId);
+    if (params?.status) query.append('status', params.status);
+    if (params?.startDate) query.append('startDate', params.startDate);
+    if (params?.endDate) query.append('endDate', params.endDate);
+    
+    return fetchData<Invoice[]>(`/invoices?${query.toString()}`);
+  }
   
-  return fetchData<Invoice[]>(`/invoices?${query.toString()}`);
+  try {
+    let data = await getData('invoices');
+    let invoices = Array.isArray(data) ? data : (data.invoices || []);
+    
+    // Apply filters
+    if (params.clientId) {
+      invoices = invoices.filter((invoice: Invoice) => invoice.clientId === params.clientId);
+    }
+    if (params.status) {
+      invoices = invoices.filter((invoice: Invoice) => invoice.status === params.status);
+    }
+    if (params.startDate) {
+      invoices = invoices.filter((invoice: Invoice) => invoice.invoiceDate >= params.startDate!);
+    }
+    if (params.endDate) {
+      invoices = invoices.filter((invoice: Invoice) => invoice.invoiceDate <= params.endDate!);
+    }
+    
+    return invoices;
+  } catch (error) {
+    console.error('Error loading invoices:', error);
+    return [];
+  }
 };
 
 export const getInvoice = async (id: string): Promise<Invoice> => {
-  return fetchData<Invoice>(`/invoices/${id}`);
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Invoice>(`/invoices/${id}`);
+  }
+  
+  const invoices = await getInvoices();
+  const invoice = invoices.find(i => i.id === id);
+  if (!invoice) throw new Error('Invoice not found');
+  return invoice;
 };
 
 export const createInvoice = async (invoice: CreateInvoiceDTO): Promise<Invoice> => {
-  return fetchData<Invoice>('/invoices', {
-    method: 'POST',
-    body: JSON.stringify(invoice),
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Invoice>('/invoices', {
+      method: 'POST',
+      body: JSON.stringify(invoice),
+    });
+  }
+  
+  const invoices = await getInvoices();
+  const newInvoice: Invoice = {
+    ...invoice,
+    id: `INV-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(invoices.length + 1).padStart(3, '0')}`,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  
+  const updatedInvoices = [...invoices, newInvoice];
+  saveData('invoices', updatedInvoices);
+  
+  return newInvoice;
 };
 
 export const updateInvoice = async (id: string, invoice: UpdateInvoiceDTO): Promise<Invoice> => {
-  return fetchData<Invoice>(`/invoices/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(invoice),
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Invoice>(`/invoices/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(invoice),
+    });
+  }
+  
+  const invoices = await getInvoices();
+  const invoiceIndex = invoices.findIndex(i => i.id === id);
+  
+  if (invoiceIndex === -1) {
+    throw new Error('Invoice not found');
+  }
+  
+  const updatedInvoice: Invoice = {
+    ...invoices[invoiceIndex],
+    ...invoice,
+    updatedAt: new Date().toISOString(),
+  };
+  
+  const updatedInvoices = [...invoices];
+  updatedInvoices[invoiceIndex] = updatedInvoice;
+  
+  saveData('invoices', updatedInvoices);
+  
+  return updatedInvoice;
 };
 
 export const deleteInvoice = async (id: string): Promise<void> => {
-  await fetchData(`/invoices/${id}`, {
-    method: 'DELETE',
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    await fetchData(`/invoices/${id}`, {
+      method: 'DELETE',
+    });
+    return;
+  }
+  
+  const invoices = await getInvoices();
+  const updatedInvoices = invoices.filter(invoice => invoice.id !== id);
+  
+  if (updatedInvoices.length === invoices.length) {
+    throw new Error('Invoice not found');
+  }
+  
+  saveData('invoices', updatedInvoices);
+};
+
+// Floor Plans
+export const getFloorPlans = async (): Promise<any[]> => {
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<any[]>('/floorplans');
+  }
+  
+  try {
+    const data = await getData('floorplans');
+    return data.floorplans || [];
+  } catch (error) {
+    console.error('Error loading floor plans:', error);
+    return [];
+  }
+};
+
+export const getFloorPlan = async (id: string): Promise<any> => {
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<any>(`/floorplans/${id}`);
+  }
+  
+  const floorPlans = await getFloorPlans();
+  const floorPlan = floorPlans.find(fp => fp.id === id);
+  if (!floorPlan) throw new Error('Floor plan not found');
+  return floorPlan;
+};
+
+export const createFloorPlan = async (floorPlan: any): Promise<any> => {
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<any>('/floorplans', {
+      method: 'POST',
+      body: JSON.stringify(floorPlan),
+    });
+  }
+  
+  const floorPlans = await getFloorPlans();
+  const newFloorPlan = {
+    ...floorPlan,
+    id: `fp-${new Date().getFullYear()}-${String(floorPlans.length + 1).padStart(3, '0')}`,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  
+  const data = await getData('floorplans');
+  const updatedData = {
+    ...data,
+    floorplans: [...floorPlans, newFloorPlan],
+    metadata: {
+      ...data.metadata,
+      totalFloorplans: floorPlans.length + 1
+    }
+  };
+  
+  saveData('floorplans', updatedData);
+  return newFloorPlan;
+};
+
+export const updateFloorPlan = async (id: string, floorPlan: any): Promise<any> => {
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<any>(`/floorplans/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(floorPlan),
+    });
+  }
+  
+  const floorPlans = await getFloorPlans();
+  const floorPlanIndex = floorPlans.findIndex(fp => fp.id === id);
+  
+  if (floorPlanIndex === -1) {
+    throw new Error('Floor plan not found');
+  }
+  
+  const updatedFloorPlan = {
+    ...floorPlans[floorPlanIndex],
+    ...floorPlan,
+    updatedAt: new Date().toISOString(),
+  };
+  
+  const updatedFloorPlans = [...floorPlans];
+  updatedFloorPlans[floorPlanIndex] = updatedFloorPlan;
+  
+  const data = await getData('floorplans');
+  const updatedData = {
+    ...data,
+    floorplans: updatedFloorPlans
+  };
+  
+  saveData('floorplans', updatedData);
+  return updatedFloorPlan;
+};
+
+export const deleteFloorPlan = async (id: string): Promise<void> => {
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    await fetchData(`/floorplans/${id}`, {
+      method: 'DELETE',
+    });
+    return;
+  }
+  
+  const floorPlans = await getFloorPlans();
+  const updatedFloorPlans = floorPlans.filter(fp => fp.id !== id);
+  
+  if (updatedFloorPlans.length === floorPlans.length) {
+    throw new Error('Floor plan not found');
+  }
+  
+  const data = await getData('floorplans');
+  const updatedData = {
+    ...data,
+    floorplans: updatedFloorPlans,
+    metadata: {
+      ...data.metadata,
+      totalFloorplans: updatedFloorPlans.length
+    }
+  };
+  
+  saveData('floorplans', updatedData);
+};
+
+// Floor Plan Editor - Save/Load reactive flow data
+export const saveFloorPlanEditor = async (editorData: { nodes: any[], edges: any[], backgroundImage?: string }): Promise<void> => {
+  if (USE_STATIC_DATA) {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}-floorplan-editor`, JSON.stringify(editorData));
+  }
+};
+
+export const loadFloorPlanEditor = async (): Promise<{ nodes: any[], edges: any[], backgroundImage?: string } | null> => {
+  if (USE_STATIC_DATA) {
+    const stored = localStorage.getItem(`${LOCAL_STORAGE_KEY}-floorplan-editor`);
+    return stored ? JSON.parse(stored) : null;
+  }
+  return null;
 };
 
 // Strategies
 export const getStrategies = async (): Promise<Strategy[]> => {
-  return fetchData<Strategy[]>('/strategies');
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Strategy[]>('/strategies');
+  }
+  
+  try {
+    const data = await getData('strategies');
+    return Array.isArray(data) ? data : (data.strategies || []);
+  } catch (error) {
+    console.error('Error loading strategies:', error);
+    return [];
+  }
 };
 
 export const getStrategy = async (id: string): Promise<Strategy> => {
-  return fetchData<Strategy>(`/strategies/${id}`);
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Strategy>(`/strategies/${id}`);
+  }
+  
+  const strategies = await getStrategies();
+  const strategy = strategies.find(s => s.id === id);
+  if (!strategy) throw new Error('Strategy not found');
+  return strategy;
 };
 
 export const createStrategy = async (strategy: Omit<Strategy, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>): Promise<Strategy> => {
-  return fetchData<Strategy>('/strategies', {
-    method: 'POST',
-    body: JSON.stringify(strategy),
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Strategy>('/strategies', {
+      method: 'POST',
+      body: JSON.stringify(strategy),
+    });
+  }
+  
+  const strategies = await getStrategies();
+  const newStrategy: Strategy = {
+    ...strategy,
+    id: Date.now().toString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    createdBy: 'current-user' // You might want to get this from auth context
+  };
+  
+  const updatedStrategies = [...strategies, newStrategy];
+  saveData('strategies', updatedStrategies);
+  
+  return newStrategy;
 };
 
 export const updateStrategy = async (id: string, strategy: Partial<Strategy>): Promise<Strategy> => {
-  return fetchData<Strategy>(`/strategies/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(strategy),
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    return fetchData<Strategy>(`/strategies/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(strategy),
+    });
+  }
+  
+  const strategies = await getStrategies();
+  const strategyIndex = strategies.findIndex(s => s.id === id);
+  
+  if (strategyIndex === -1) {
+    throw new Error('Strategy not found');
+  }
+  
+  const updatedStrategy: Strategy = {
+    ...strategies[strategyIndex],
+    ...strategy,
+    updatedAt: new Date().toISOString(),
+  };
+  
+  const updatedStrategies = [...strategies];
+  updatedStrategies[strategyIndex] = updatedStrategy;
+  
+  saveData('strategies', updatedStrategies);
+  
+  return updatedStrategy;
 };
 
 export const deleteStrategy = async (id: string): Promise<void> => {
-  await fetchData(`/strategies/${id}`, {
-    method: 'DELETE',
-  });
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
+    await fetchData(`/strategies/${id}`, {
+      method: 'DELETE',
+    });
+    return;
+  }
+  
+  const strategies = await getStrategies();
+  const updatedStrategies = strategies.filter(strategy => strategy.id !== id);
+  
+  if (updatedStrategies.length === strategies.length) {
+    throw new Error('Strategy not found');
+  }
+  
+  saveData('strategies', updatedStrategies);
 };
 
 // Timelines

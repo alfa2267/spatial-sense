@@ -1,0 +1,105 @@
+[
+  {
+    "id": "evt-001",
+    "type": "device_status",
+    "title": "Living Room TV Turned On",
+    "description": "Smart TV was turned on via voice command",
+    "deviceId": "dev-001",
+    "deviceName": "Living Room Smart TV",
+    "location": "Living Room",
+    "severity": "info",
+    "status": "resolved",
+    "timestamp": "2023-05-22T19:30:15Z",
+    "metadata": {
+      "trigger": "voice_command",
+      "user": "Sarah",
+      "action": "power_on"
+    }
+  },
+  {
+    "id": "evt-002", 
+    "type": "security_alert",
+    "title": "Motion Detected at Front Door",
+    "description": "Doorbell camera detected motion and started recording",
+    "deviceId": "dev-004",
+    "deviceName": "Front Door Camera", 
+    "location": "Front Door",
+    "severity": "warning",
+    "status": "active",
+    "timestamp": "2023-05-22T18:45:22Z",
+    "metadata": {
+      "trigger": "motion_detection",
+      "confidence": 95,
+      "recording_started": true
+    }
+  },
+  {
+    "id": "evt-003",
+    "type": "system_maintenance",
+    "title": "Thermostat Firmware Update",
+    "description": "Master bedroom thermostat updated to firmware v6.1.0",
+    "deviceId": "dev-002",
+    "deviceName": "Master Bedroom Thermostat",
+    "location": "Master Bedroom", 
+    "severity": "info",
+    "status": "completed",
+    "timestamp": "2023-05-22T16:45:33Z",
+    "metadata": {
+      "trigger": "automatic_update",
+      "previous_version": "6.0.2",
+      "new_version": "6.1.0"
+    }
+  },
+  {
+    "id": "evt-004",
+    "type": "automation_trigger",
+    "title": "Evening Wind Down Activated",
+    "description": "Automated evening routine started - lights dimmed to 30%",
+    "deviceId": null,
+    "deviceName": null,
+    "location": "Whole Home",
+    "severity": "info", 
+    "status": "completed",
+    "timestamp": "2023-05-22T21:05:45Z",
+    "metadata": {
+      "trigger": "time_based",
+      "strategy_id": "strat-003",
+      "devices_affected": 5
+    }
+  },
+  {
+    "id": "evt-005",
+    "type": "device_offline",
+    "title": "Kitchen Smart Bulb Disconnected",
+    "description": "One of the kitchen smart bulbs went offline unexpectedly",
+    "deviceId": "dev-003",
+    "deviceName": "Kitchen Smart Bulbs",
+    "location": "Kitchen",
+    "severity": "error",
+    "status": "unresolved", 
+    "timestamp": "2023-05-22T14:22:18Z",
+    "metadata": {
+      "trigger": "connection_lost",
+      "last_seen": "2023-05-22T14:20:05Z",
+      "retry_attempts": 3
+    }
+  },
+  {
+    "id": "evt-006",
+    "type": "energy_report",
+    "title": "Daily Energy Consumption Report",
+    "description": "Total daily energy consumption: 12.4 kWh (8% reduction from yesterday)",
+    "deviceId": null,
+    "deviceName": null,
+    "location": "Whole Home",
+    "severity": "info",
+    "status": "completed",
+    "timestamp": "2023-05-22T23:59:59Z",
+    "metadata": {
+      "trigger": "scheduled_report",
+      "total_consumption": 12.4,
+      "reduction_percentage": 8,
+      "cost_savings": "£1.20"
+    }
+  }
+]
