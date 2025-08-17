@@ -11,12 +11,13 @@
     const path = window.location.pathname;
     const base = '/spatial-sense';
     
-    // If we're already at the root, no need to redirect
+    // If we're already at the root with a hash, no need to redirect
+    if ((path === base + '/' || path === base + '/index.html') && window.location.hash) {
+      return;
+    }
+    
+    // If we're at the root with no hash, redirect to dashboard
     if (path === base + '/' || path === base + '/index.html') {
-      // If there's a hash, the router will handle it
-      if (window.location.hash) return;
-      
-      // Otherwise, redirect to dashboard
       window.location.replace(base + '/#/dashboard');
       return;
     }
@@ -27,12 +28,12 @@
     // Clean up the route (remove leading/trailing slashes and index.html)
     route = route.replace(/^\/+|\/+$/g, '').replace(/index\.html$/, '');
     
-    // Build the new URL with hash-based routing
-    const newUrl = base + '/#' + (route ? '/' + route : '/dashboard');
-    
-    // Only redirect if we're not already on the correct URL
-    if (window.location.href !== newUrl) {
-      window.location.replace(newUrl);
+    // If the route is not empty, redirect to hash-based URL
+    if (route) {
+      const newUrl = base + '/#/' + route + window.location.search + window.location.hash;
+      if (window.location.href !== newUrl) {
+        window.location.replace(newUrl);
+      }
     }
   </script>
   <noscript>
