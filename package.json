@@ -1,7 +1,7 @@
 {
   "name": "spatialsense-temp",
   "version": "0.1.0",
-  "homepage": "https://alfa2267.github.io/spatial-sense",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
