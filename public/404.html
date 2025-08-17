@@ -18,7 +18,7 @@
     
     // If we're at the root with no hash, redirect to dashboard
     if (path === base + '/' || path === base + '/index.html') {
-      window.location.replace(base + '/#/dashboard');
+      window.location.replace(window.location.origin + base + '/#/dashboard');
       return;
     }
     
@@ -30,10 +30,8 @@
     
     // If the route is not empty, redirect to hash-based URL
     if (route) {
-      const newUrl = base + '/#/' + route + window.location.search + window.location.hash;
-      if (window.location.href !== newUrl) {
-        window.location.replace(newUrl);
-      }
+      const newUrl = window.location.origin + base + '/#/' + route + window.location.search + window.location.hash;
+      window.location.replace(newUrl);
     }
   </script>
   <noscript>
