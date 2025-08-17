@@ -28,6 +28,8 @@ import {
   EmptyState,
   StatusChip 
 } from '../../components';
+import { useAppDispatch } from '../../store/store';
+import { addNotification } from '../../store/slices/notificationsSlice';
 
 // Mock data types
 interface Report {
@@ -67,19 +69,35 @@ const ReportsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const dispatch = useAppDispatch();
 
   const handleCreateReport = (type: string) => {
     console.log(`Creating ${type} report`);
+    dispatch(addNotification({
+      title: `Created new ${type} report`,
+      read: false,
+      createdAt: new Date().toISOString(),
+    }));
     setCreateMenuAnchor(null);
   };
 
   const handleExport = (format: string) => {
     console.log(`Exporting as ${format}`);
+    dispatch(addNotification({
+      title: `Exported reports as ${format.toUpperCase()}`,
+      read: false,
+      createdAt: new Date().toISOString(),
+    }));
     setExportMenuAnchor(null);
   };
 
   const handleTemplateEditor = () => {
     console.log('Opening template editor');
+    dispatch(addNotification({
+      title: 'Opened template editor',
+      read: false,
+      createdAt: new Date().toISOString(),
+    }));
   };
 
   const getTypeIcon = (type: string) => {

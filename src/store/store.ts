@@ -5,7 +5,7 @@ import { combineReducers } from 'redux';
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 
 // Import reducers from the slices index
-import { clientsReducer } from './slices';
+import { clientsReducer, notificationsReducer } from './slices';
 // Import other reducers as they are created
 // import { projectsReducer } from './slices';
 // import { devicesReducer } from './slices';
@@ -13,6 +13,7 @@ import { clientsReducer } from './slices';
 
 const rootReducer = combineReducers({
   clients: clientsReducer,
+  notifications: notificationsReducer,
   // Add other reducers here
   // projects: projectsReducer,
   // devices: devicesReducer,
@@ -23,7 +24,7 @@ const persistConfig = {
   key: 'root',
   storage,
   // Add any reducers you want to persist
-  whitelist: ['clients'],
+  whitelist: ['clients', 'notifications'],
   // Add any reducers you want to blacklist
   // blacklist: [],
 };
