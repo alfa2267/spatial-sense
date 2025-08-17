@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme, AppBar, Toolbar, IconButton, Typography, Box, Avatar, Menu, MenuItem, Badge } from '@mui/material';
 import { Menu as MenuIcon, Notifications as NotificationsIcon, Search as SearchIcon } from '@mui/icons-material';
 import { drawerWidth } from './constants';
@@ -14,6 +14,25 @@ export const TopBar = ({ handleDrawerToggle }: TopBarProps) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadNotifications = async () => {
+      try {
+        const res = await fetch('/data/notifications.json');
+        if (!res.ok) throw new Error('Failed to load notifications');
+        const items: Array<{ id: string; title: string; read?: boolean }> = await res.json();
+        const count = Array.isArray(items) ? items.filter(n => !n.read).length : 0;
+        if (isMounted) setUnreadCount(count);
+      } catch (e) {
+        console.warn('Notifications load error:', e);
+        if (isMounted) setUnreadCount(0);
+      }
+    };
+    loadNotifications();
+    return () => { isMounted = false; };
+  }, []);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -59,7 +78,7 @@ export const TopBar = ({ handleDrawerToggle }: TopBarProps) => {
           </Box>
           
           <IconButton size="large" color="inherit" sx={{ mr: 1 }}>
-            <Badge badgeContent={4} color="error">
+            <Badge badgeContent={unreadCount} color="error">
               <NotificationsIcon />
             </Badge>
           </IconButton>

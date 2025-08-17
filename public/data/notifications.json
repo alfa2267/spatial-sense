@@ -1,0 +1,7 @@
+[
+  { "id": "n1", "title": "New client assigned", "read": false, "createdAt": "2025-08-10T10:00:00Z" },
+  { "id": "n2", "title": "Report export completed", "read": false, "createdAt": "2025-08-12T14:30:00Z" },
+  { "id": "n3", "title": "Strategy updated by teammate", "read": false, "createdAt": "2025-08-15T09:15:00Z" },
+  { "id": "n4", "title": "Server maintenance scheduled", "read": false, "createdAt": "2025-08-16T18:45:00Z" },
+  { "id": "n5", "title": "Weekly summary available", "read": true,  "createdAt": "2025-08-09T08:00:00Z" }
+]
