@@ -20,7 +20,48 @@ export const queryClient = new QueryClient({
   },
 });
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' ? '/api' : '';
+// For GitHub Pages, we'll use static JSON files and localStorage
+const USE_STATIC_DATA = true;
+const STATIC_DATA_BASE = '/data';
+const LOCAL_STORAGE_KEY = 'spatial-sense-data';
+
+// Initialize localStorage with default data if empty
+const initializeLocalStorage = async () => {
+  if (!localStorage.getItem(LOCAL_STORAGE_KEY)) {
+    try {
+      const response = await fetch(`${STATIC_DATA_BASE}/clients.json`);
+      const data = await response.json();
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error('Failed to initialize localStorage with default data:', error);
+    }
+  }
+};
+
+// Get data from localStorage or fallback to static file
+const getData = async (key: string) => {
+  if (USE_STATIC_DATA) {
+    const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (storedData) {
+      return JSON.parse(storedData);
+    }
+    const response = await fetch(`${STATIC_DATA_BASE}/${key}.json`);
+    return response.json();
+  }
+  return {};
+};
+
+// Save data to localStorage
+const saveData = (data: any) => {
+  if (USE_STATIC_DATA) {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+  }
+};
+
+// Initialize localStorage with default data
+initializeLocalStorage();
+
+const API_BASE_URL = process.env.NODE_ENV === 'production' && !USE_STATIC_DATA ? '/api' : '';
 
 async function fetchData<T>(
   endpoint: string, 
@@ -47,29 +88,49 @@ async function fetchData<T>(
   return response.json();
 }
 
-// Clients - Use mock data in development
+// Clients - Use static data in production
 export const getClients = async (): Promise<Client[]> => {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
     return mockApiClients.getAll();
   }
-  return fetchData<Client[]>('/clients');
+  
+  try {
+    const data = await getData('clients');
+    return data.clients || [];
+  } catch (error) {
+    console.error('Error loading clients:', error);
+    return [];
+  }
 };
 
 export const getClient = async (id: string): Promise<Client> => {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
     return mockApiClients.getById(id);
   }
-  return fetchData<Client>(`/clients/${id}`);
+  
+  const clients = await getClients();
+  const client = clients.find(c => c.id === id);
+  if (!client) throw new Error('Client not found');
+  return client;
 };
 
 export const createClient = async (client: Omit<Client, 'id' | 'createdAt' | 'updatedAt'>): Promise<Client> => {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
     return mockApiClients.create(client);
   }
-  return fetchData<Client>('/clients', {
-    method: 'POST',
-    body: JSON.stringify(client),
-  });
+  
+  const clients = await getClients();
+  const newClient: Client = {
+    ...client,
+    id: Date.now().toString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  
+  const updatedClients = [...clients, newClient];
+  saveData({ ...(await getData('clients')), clients: updatedClients });
+  
+  return newClient;
 };
 
 export const updateClient = async (id: string, client: Partial<Client>): Promise<Client> => {
@@ -83,12 +144,18 @@ export const updateClient = async (id: string, client: Partial<Client>): Promise
 };
 
 export const deleteClient = async (id: string): Promise<void> => {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' && !USE_STATIC_DATA) {
     return mockApiClients.delete(id);
   }
-  await fetchData(`/clients/${id}`, {
-    method: 'DELETE',
-  });
+  
+  const clients = await getClients();
+  const updatedClients = clients.filter(client => client.id !== id);
+  
+  if (updatedClients.length === clients.length) {
+    throw new Error('Client not found');
+  }
+  
+  saveData({ ...(await getData('clients')), clients: updatedClients });
 };
 
 // Projects
