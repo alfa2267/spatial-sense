@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 
 // Lazy load pages for better performance
@@ -14,7 +14,7 @@ const SettingsPage = lazy(() => import('./pages/SettingsPage/SettingsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage/NotFoundPage'));
 
 const AppRoutes = () => (
-  <BrowserRouter basename="/spatial-sense">
+  <Router>
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Navigate to="/dashboard" replace />} />
@@ -30,7 +30,7 @@ const AppRoutes = () => (
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
-  </BrowserRouter>
+  </Router>
 );
 
 export default AppRoutes;
