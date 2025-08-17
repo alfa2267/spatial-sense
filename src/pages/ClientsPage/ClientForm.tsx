@@ -7,7 +7,7 @@ import {
   DialogActions,
   TextField,
   Button,
-  Grid,
+  Grid2 as Grid,
   MenuItem,
   FormControl,
   InputLabel,
@@ -37,7 +37,15 @@ export const ClientForm: React.FC<ClientFormProps> = ({
   loading = false,
 }) => {
   const [formData, setFormData] = React.useState<Omit<Client, 'id' | 'createdAt' | 'updatedAt'>>(
-    initialData || {
+    initialData ? {
+      name: initialData.name,
+      email: initialData.email,
+      phone: initialData.phone,
+      company: initialData.company,
+      status: initialData.status,
+      address: initialData.address,
+      notes: initialData.notes,
+    } : {
       name: '',
       email: '',
       phone: '',
@@ -51,14 +59,20 @@ export const ClientForm: React.FC<ClientFormProps> = ({
         country: '',
       },
       notes: '',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     }
   );
 
   React.useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      setFormData({
+        name: initialData.name,
+        email: initialData.email,
+        phone: initialData.phone,
+        company: initialData.company,
+        status: initialData.status,
+        address: initialData.address,
+        notes: initialData.notes,
+      });
     } else {
       setFormData({
         name: '',
@@ -74,8 +88,6 @@ export const ClientForm: React.FC<ClientFormProps> = ({
           country: '',
         },
         notes: '',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
       });
     }
   }, [initialData, open]);
@@ -176,14 +188,14 @@ export const ClientForm: React.FC<ClientFormProps> = ({
                   value={formData.status}
                   onChange={(e) => setFormData(prev => ({
                     ...prev,
-                    status: e.target.value as 'active' | 'inactive' | 'pending'
+                    status: e.target.value as 'active' | 'inactive' | 'lead'
                   }))}
                   label="Status"
                   disabled={loading}
                 >
                   <MenuItem value="active">Active</MenuItem>
                   <MenuItem value="inactive">Inactive</MenuItem>
-                  <MenuItem value="pending">Pending</MenuItem>
+                  <MenuItem value="lead">Lead</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
