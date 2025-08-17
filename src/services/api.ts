@@ -1,6 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 import { DashboardStats } from '../types/data';
 import { Client } from '../types/domains/client.types';
+import { mockApiClients } from './mockData';
 import { Project, CreateProjectDTO, UpdateProjectDTO, ProjectFilters } from '../types/domains/project.types';
 import { Device, CreateDeviceDTO, UpdateDeviceDTO } from '../types/domains/device.types';
 import { Event } from '../types/domains/event.types';
@@ -19,7 +20,7 @@ export const queryClient = new QueryClient({
   },
 });
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = process.env.NODE_ENV === 'production' ? '/api' : '';
 
 async function fetchData<T>(
   endpoint: string, 
@@ -46,16 +47,25 @@ async function fetchData<T>(
   return response.json();
 }
 
-// Clients
+// Clients - Use mock data in development
 export const getClients = async (): Promise<Client[]> => {
+  if (process.env.NODE_ENV === 'development') {
+    return mockApiClients.getAll();
+  }
   return fetchData<Client[]>('/clients');
 };
 
 export const getClient = async (id: string): Promise<Client> => {
+  if (process.env.NODE_ENV === 'development') {
+    return mockApiClients.getById(id);
+  }
   return fetchData<Client>(`/clients/${id}`);
 };
 
 export const createClient = async (client: Omit<Client, 'id' | 'createdAt' | 'updatedAt'>): Promise<Client> => {
+  if (process.env.NODE_ENV === 'development') {
+    return mockApiClients.create(client);
+  }
   return fetchData<Client>('/clients', {
     method: 'POST',
     body: JSON.stringify(client),
@@ -63,6 +73,9 @@ export const createClient = async (client: Omit<Client, 'id' | 'createdAt' | 'up
 };
 
 export const updateClient = async (id: string, client: Partial<Client>): Promise<Client> => {
+  if (process.env.NODE_ENV === 'development') {
+    return mockApiClients.update(id, client);
+  }
   return fetchData<Client>(`/clients/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(client),
@@ -70,6 +83,9 @@ export const updateClient = async (id: string, client: Partial<Client>): Promise
 };
 
 export const deleteClient = async (id: string): Promise<void> => {
+  if (process.env.NODE_ENV === 'development') {
+    return mockApiClients.delete(id);
+  }
   await fetchData(`/clients/${id}`, {
     method: 'DELETE',
   });

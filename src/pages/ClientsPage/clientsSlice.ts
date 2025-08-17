@@ -1,11 +1,24 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { Client } from '../../types/data';
+import { Client } from '../../types/domains/client.types';
 import { getClients, createClient, updateClient, deleteClient } from '../../services/api';
 
 interface ClientsState {
   clients: Client[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
+}
+
+// Normalize various address shapes to a single string as required by `Client.address`
+function formatAddress(address: unknown): string {
+  if (!address) return '';
+  if (typeof address === 'string') return address;
+  if (typeof address === 'object') {
+    const obj = address as Record<string, string | undefined>;
+    const { street, city, state, postalCode, country, ...rest } = obj;
+    const parts = [street, city, state, postalCode, country, ...Object.values(rest)];
+    return parts.filter(Boolean).join(', ');
+  }
+  return String(address);
 }
 
 const initialState: ClientsState = {
@@ -79,7 +92,7 @@ const clientsSlice = createSlice({
         state.status = 'succeeded';
         state.clients = action.payload.map(client => ({
           ...client,
-          address: typeof client.address === 'string' ? client.address : client.address
+          address: formatAddress((client as any).address),
         }));
       })
       .addCase(fetchClients.rejected, (state, action) => {
@@ -89,15 +102,20 @@ const clientsSlice = createSlice({
       .addCase(addNewClient.fulfilled, (state, action) => {
         const client = {
           ...action.payload,
-          address: typeof action.payload.address === 'string' ? action.payload.address : action.payload.address
-        };
+          address: formatAddress((action.payload as any).address),
+        } as Client;
         state.clients.push(client);
       })
       .addCase(updateExistingClient.fulfilled, (state, action) => {
         const { id } = action.payload;
         const existingClient = state.clients.find(client => client.id === id);
         if (existingClient) {
-          Object.assign(existingClient, action.payload);
+          const maybeAddress = (action.payload as any).address;
+          const normalized = {
+            ...action.payload,
+            ...(maybeAddress !== undefined ? { address: formatAddress(maybeAddress) } : {}),
+          } as Partial<Client> & { updatedAt?: string };
+          Object.assign(existingClient, normalized);
         }
       })
       .addCase(removeClient.fulfilled, (state, action) => {

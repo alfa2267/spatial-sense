@@ -1,5 +1,5 @@
 import React from 'react';
-import { Client } from '../../types';
+import { Client } from '../../types/domains/client.types';
 import { 
   Box, 
   Typography, 

@@ -31,9 +31,9 @@ import {
   TimelineEvent, 
   TeamMember,
   TimelineStatus,
-  TimelinePriority
+  TimelinePriority,
+  TimelineProject
 } from '../../types/domains/timeline.types';
-import { Project } from '../../types/domains/project.types';
 
 // Type guard for TimelineStatus
 function isTimelineStatus(status: any): status is TimelineStatus {
@@ -45,16 +45,11 @@ function isTimelinePriority(priority: any): priority is TimelinePriority {
   return ['low', 'medium', 'high', 'critical'].includes(priority);
 }
 
-// Extend Project type to include color if needed
-interface ProjectWithColor extends Project {
-  color?: string;
-}
-
 interface EventFormModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (event: Partial<TimelineEvent>) => void;
-  projects: ProjectWithColor[];
+  projects: TimelineProject[];
   teamMembers: TeamMember[];
   initialData?: Partial<TimelineEvent>;
 }
@@ -339,7 +334,7 @@ const EventFormModal: React.FC<EventFormModalProps> = ({
                     const projectId = e.target.value as string;
                     handleChange('projectId', projectId);
                     // Update color when project changes
-                    const selectedProject = projects.find((p: ProjectWithColor) => p.id === projectId);
+                    const selectedProject = projects.find((p: TimelineProject) => p.id === projectId);
                     if (selectedProject?.color) {
                       handleChange('color', selectedProject.color);
                     }

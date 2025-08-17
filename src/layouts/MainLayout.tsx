@@ -13,7 +13,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -26,9 +25,9 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     }),
     marginLeft: `${drawerWidth}px`,
   }),
-  [theme.breakpoints.down('md')]: {
-    padding: theme.spacing(2),
-  },
+  minHeight: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
 }));
 
 type MainLayoutProps = {
@@ -70,9 +69,15 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
         sx={{
           backgroundColor: theme.palette.background.default,
           flexGrow: 1,
-          p: { xs: 2, sm: 3 },
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          width: { sm: `calc(100% - 20px)` },
+          ml: { sm: '20px' },
+          mt: { xs: 7, sm: 8 }, // Account for TopBar height
+          // Only 20px left spacing from sidebar edge
+          pt: { xs: 1, sm: 2 },
+          pr: { xs: 1, sm: 2 },
+          pb: { xs: 1, sm: 2 },
+          pl: { xs: 1, sm: '20px' }, // Exactly 20px left spacing
+          maxWidth: '100%'
         }}
       >
         {children || <Outlet />}

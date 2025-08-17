@@ -1,5 +1,5 @@
 import React from 'react';
-import { Client } from '../../types';
+import { Client } from '../../types/domains/client.types';
 import {
   Dialog,
   DialogTitle,
@@ -17,9 +17,6 @@ import {
   IconButton,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 interface ClientFormProps {
   open: boolean;

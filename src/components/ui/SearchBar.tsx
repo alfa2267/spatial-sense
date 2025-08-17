@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import { InputBase, Box, List, ListItem, ListItemButton, ListItemText, Paper, Popper, ClickAwayListener } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
@@ -59,6 +60,7 @@ export const SearchBar = () => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   // Mock search function - replace with actual API call
   const handleSearch = (term: string) => {
@@ -93,9 +95,26 @@ export const SearchBar = () => {
   };
 
   const handleResultClick = (result: SearchResult) => {
-    // Handle navigation to the result
-    console.log('Navigating to:', result);
+    // Navigate to an appropriate route based on result type
+    switch (result.type) {
+      case 'strategy':
+        navigate('/strategy');
+        break;
+      case 'client':
+        navigate('/clients');
+        break;
+      case 'device':
+        navigate('/devices');
+        break;
+      case 'report':
+        // No explicit reports route; send to dashboard as a placeholder
+        navigate('/dashboard');
+        break;
+      default:
+        navigate('/');
+    }
     setOpen(false);
+    setSearchTerm('');
   };
 
   return (

@@ -1,8 +1,11 @@
 import { Project, Client } from '../../types';
+import { ApiResponse } from '../../types/api/response.types';
+import { BaseDataService } from './BaseDataService';
 
-export class DataService {
-  fetch(arg0: string): import("../../types/api/response.types").ApiResponse<import("../../types").Strategy[]> | PromiseLike<import("../../types/api/response.types").ApiResponse<import("../../types").Strategy[]>> {
-    throw new Error('Method not implemented.');
+export class DataService extends BaseDataService {
+  // Expose the base protected fetch as a public method for consumers
+  public async fetch<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+    return super.fetch<T>(endpoint, options);
   }
   private static async loadData<T>(file: string): Promise<T> {
     try {

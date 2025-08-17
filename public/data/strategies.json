@@ -1,0 +1,66 @@
+[
+  {
+    "id": "strat-001",
+    "name": "Evening Lights",
+    "description": "Turn on living room and porch lights at sunset.",
+    "status": "active",
+    "type": "home_automation",
+    "category": "lighting",
+    "icon": "Lightbulb",
+    "lastUpdated": "2025-08-10",
+    "devices": [
+      { "type": "light", "icon": "lightbulb", "count": 4, "status": "included" }
+    ],
+    "recommendedDevices": [
+      { "type": "motion_sensor", "icon": "sensors", "count": 1, "status": "recommended", "reason": "Optional motion override" }
+    ],
+    "triggers": [
+      { "type": "time", "value": "sunset", "days": ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"] }
+    ],
+    "actions": [
+      { "type": "device", "target": "living_room_lights", "action": "on" },
+      { "type": "device", "target": "porch_light", "action": "on" }
+    ],
+    "clientId": null,
+    "projectId": null,
+    "tags": ["lighting","evening"],
+    "settings": { "brightness": 70 },
+    "rules": [
+      {
+        "id": "rule-1",
+        "type": "time",
+        "condition": "at_sunset",
+        "action": "turn_on",
+        "params": { "targets": ["living_room_lights","porch_light"] }
+      }
+    ],
+    "createdAt": "2025-08-01T12:00:00.000Z",
+    "updatedAt": "2025-08-10T08:30:00.000Z",
+    "createdBy": "user-001"
+  },
+  {
+    "id": "strat-002",
+    "name": "Energy Saver Night",
+    "description": "Reduce thermostat and turn off non-essential lights at 11 PM.",
+    "status": "draft",
+    "type": "energy_saving",
+    "category": "energy",
+    "icon": "EnergySavingsLeaf",
+    "lastUpdated": "2025-08-08",
+    "devices": [
+      { "type": "thermostat", "icon": "device_thermostat", "count": 1, "status": "included" }
+    ],
+    "recommendedDevices": [],
+    "triggers": [
+      { "type": "time", "value": "23:00", "days": ["Mon","Tue","Wed","Thu","Fri"] }
+    ],
+    "actions": [
+      { "type": "device", "target": "thermostat", "action": "set", "params": { "temperature": 18 } },
+      { "type": "scene", "target": "non_essential_lights", "action": "off" }
+    ],
+    "rules": [],
+    "createdAt": "2025-07-20T09:00:00.000Z",
+    "updatedAt": "2025-08-08T20:00:00.000Z",
+    "createdBy": "user-002"
+  }
+]

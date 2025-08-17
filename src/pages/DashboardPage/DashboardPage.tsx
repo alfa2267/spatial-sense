@@ -1,9 +1,10 @@
-import { Box, Typography, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import { StatCard } from './StatCard';
 import { ProjectStatusChart } from './ProjectStatusChart';
 import { RevenueChart } from './RevenueChart';
 import { RecentActivities } from './RecentActivities';
 import { Assignment, People, AttachMoney, CheckCircle } from '@mui/icons-material';
+import { PageContainer, PageHeader } from '../../components';
 
 // Define types for our mock data
 interface ProjectStatusData {
@@ -96,10 +97,8 @@ const DashboardPage = () => {
   ];
 
   return (
-    <Box sx={{ flexGrow: 1, p: 3 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Dashboard
-      </Typography>
+    <PageContainer>
+      <PageHeader title="Dashboard" />
       
       {/* Stats Grid */}
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 3, mb: 3 }}>
@@ -130,7 +129,7 @@ const DashboardPage = () => {
       <Box>
         <RecentActivities activities={activities} />
       </Box>
-    </Box>
+    </PageContainer>
   );
 };
 

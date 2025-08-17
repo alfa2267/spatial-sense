@@ -1,5 +1,5 @@
 import React from 'react';
-import { Client } from '../../types';
+import { Client } from '../../types/domains/client.types';
 import { Card, CardContent, Typography, Avatar, Box, Skeleton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTheme, AppBar, Toolbar, IconButton, Typography, Box, Avatar, Menu, MenuItem, Badge } from '@mui/material';
 import { Menu as MenuIcon, Notifications as NotificationsIcon, Search as SearchIcon } from '@mui/icons-material';
+import { drawerWidth } from './constants';
 
 // Components
 import { SearchBar } from '../components/ui/SearchBar';
@@ -26,8 +27,8 @@ export const TopBar = ({ handleDrawerToggle }: TopBarProps) => {
     <AppBar
       position="fixed"
       sx={{
-        width: { sm: `calc(100% - 240px)` },
-        ml: { sm: '240px' },
+        width: { sm: `calc(100% - ${drawerWidth}px)` },
+        ml: { sm: `${drawerWidth}px` },
         boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
         backgroundColor: 'background.paper',
         color: 'text.primary',
