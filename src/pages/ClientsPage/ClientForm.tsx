@@ -7,7 +7,7 @@ import {
   DialogActions,
   TextField,
   Button,
-  Grid2 as Grid,
+  Grid,
   MenuItem,
   FormControl,
   InputLabel,
@@ -137,7 +137,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({
       <form onSubmit={handleSubmit}>
         <DialogContent dividers>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Typography variant="subtitle1" gutterBottom>
                 Basic Information
               </Typography>
@@ -199,7 +199,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Typography variant="subtitle1" gutterBottom>
                 Address
               </Typography>
@@ -207,29 +207,29 @@ export const ClientForm: React.FC<ClientFormProps> = ({
                 fullWidth
                 label="Street Address"
                 name="address.street"
-                value={formData.address?.street || ''}
+                value={typeof formData.address === 'object' ? formData.address?.street || '' : ''}
                 onChange={handleChange}
                 margin="normal"
                 disabled={loading}
               />
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="City"
                     name="address.city"
-                    value={formData.address?.city || ''}
+                    value={typeof formData.address === 'object' ? formData.address?.city || '' : ''}
                     onChange={handleChange}
                     margin="normal"
                     disabled={loading}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="State/Province"
                     name="address.state"
-                    value={formData.address?.state || ''}
+                    value={typeof formData.address === 'object' ? formData.address?.state || '' : ''}
                     onChange={handleChange}
                     margin="normal"
                     disabled={loading}
@@ -237,23 +237,23 @@ export const ClientForm: React.FC<ClientFormProps> = ({
                 </Grid>
               </Grid>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Postal Code"
                     name="address.postalCode"
-                    value={formData.address?.postalCode || ''}
+                    value={typeof formData.address === 'object' ? formData.address?.postalCode || '' : ''}
                     onChange={handleChange}
                     margin="normal"
                     disabled={loading}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Country"
                     name="address.country"
-                    value={formData.address?.country || ''}
+                    value={typeof formData.address === 'object' ? formData.address?.country || '' : ''}
                     onChange={handleChange}
                     margin="normal"
                     disabled={loading}
@@ -261,7 +261,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Notes"

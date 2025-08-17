@@ -15,7 +15,7 @@ import 'reactflow/dist/style.css';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 // Custom Room Node Component
-const RoomNode = ({ data }) => {
+const RoomNode = ({ data }: { data: any }) => {
   return (
     <div className="room-node">
       <div className="room-header">
@@ -66,7 +66,7 @@ const FloorPlanEditor = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [backgroundImage, setBackgroundImage] = useState(null);
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [message, setMessage] = useState('Ready to import floor plan');
   const fileInputRef = useRef(null);
@@ -82,13 +82,13 @@ const FloorPlanEditor = () => {
   );
 
   // Show message
-  const showMessage = (msg, duration = 3000) => {
+  const showMessage = (msg: string, duration = 3000) => {
     setMessage(msg);
     setTimeout(() => setMessage('Ready'), duration);
   };
 
   // Upload and analyze floor plan
-  const handleFileUpload = async (event) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -119,7 +119,7 @@ const FloorPlanEditor = () => {
       const result = await response.json();
       
       // Convert detections to React-Flow nodes
-      const detectedRooms = result.predictions?.map((prediction, index) => {
+      const detectedRooms = result.predictions?.map((prediction: any, index: number) => {
         const roomTypes = {
           'kitchen': { icon: '🍳', name: 'Kitchen' },
           'bedroom': { icon: '🛏️', name: 'Bedroom' },
@@ -128,7 +128,7 @@ const FloorPlanEditor = () => {
           'dining': { icon: '🍽️', name: 'Dining Room' },
         };
 
-        const roomType = roomTypes[prediction.class] || { icon: '📦', name: 'Room' };
+        const roomType = roomTypes[prediction.class as keyof typeof roomTypes] || { icon: '📦', name: 'Room' };
         
         return {
           id: `room-${index}`,
@@ -176,7 +176,7 @@ const FloorPlanEditor = () => {
   };
 
   // Add device to canvas
-  const addDevice = (deviceType) => {
+  const addDevice = (deviceType: string) => {
     const device = SMART_DEVICES.find(d => d.type === deviceType);
     if (!device) return;
 

@@ -37,17 +37,23 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   flexDirection: 'column',
 }));
 
-const StatusChip = styled(Chip)(({ theme, status }) => ({
+interface StatusChipProps {
+  statusvalue: 'active' | 'inactive' | 'lead';
+}
+
+const StatusChip = styled(Chip, {
+  shouldForwardProp: (prop) => prop !== 'statusvalue',
+})<StatusChipProps>(({ theme, statusvalue }) => ({
   textTransform: 'capitalize',
-  backgroundColor: status === 'active' 
+  backgroundColor: statusvalue === 'active' 
     ? theme.palette.success.light 
-    : status === 'pending' 
+    : statusvalue === 'lead' 
       ? theme.palette.warning.light 
       : theme.palette.error.light,
   color: theme.palette.getContrastText(
-    status === 'active' 
+    statusvalue === 'active' 
       ? theme.palette.success.light 
-      : status === 'pending' 
+      : statusvalue === 'lead' 
         ? theme.palette.warning.light 
         : theme.palette.error.light
   ),
@@ -133,7 +139,7 @@ export const ClientDetails: React.FC<ClientDetailsProps> = ({
               <StatusChip 
                 label={client.status} 
                 size="small" 
-                status={client.status}
+                statusvalue={client.status}
               />
             </Box>
             <Typography variant="body2" color="textSecondary">
