@@ -13,7 +13,8 @@ const InvoicesPage = lazy(() => import('./pages/InvoicesPage/InvoicesPage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage/SettingsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage/NotFoundPage'));
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
   {
     path: '/',
     element: <MainLayout />,
@@ -64,6 +65,8 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+  ],
+  { basename: '/spatial-sense' }
+);
 
 export default router;
