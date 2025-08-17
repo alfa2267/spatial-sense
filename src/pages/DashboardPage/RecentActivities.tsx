@@ -6,7 +6,8 @@ import {
   Error as ErrorIcon,
   ArrowForward as ArrowForwardIcon 
 } from '@mui/icons-material';
-import { formatDistanceToNow, isValid } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow';
+import { isValid } from 'date-fns/isValid';
 
 interface Activity {
   id: string | number;
