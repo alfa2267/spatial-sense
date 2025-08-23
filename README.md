@@ -106,7 +106,7 @@ project:
   status: "active"
   category: "web-app"
   tech_stack: ["React", "Node.js"]
-  demo_url: "alfa2267.github.io/spatial-sense"
+  demo_url: "https://alfa2267.github.io/spatial-sense"
   repo_url: "https://github.com/alfa2267/spatial-sense"
   priority: 4
   show_in_nav: true
